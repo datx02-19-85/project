@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/datx02-19-85/contracts.svg?style=svg)](https://circleci.com/gh/datx02-19-85/contracts)
+
 # Contracts
 
 This repo is used to store all of our smart contracts and test cases.
@@ -10,7 +12,7 @@ TODO:
 - [ ] Fill out the readme
 - [ ] Set correct license
 - [ ] A small voting prototype
-- [ ] Travic CI?
+- [x] CI
 
 ## How to run
 
