@@ -86,6 +86,11 @@ module.exports = {
 
   // Set default mocha options here, use special reporters etc.
   mocha: {
+    reporter: "eth-gas-reporter",
+    reporterOptions : {
+      currency: "SEK", // change this if you want to change currency. Using Swedish krona
+      gasPrice: 2
+    }
     // timeout: 100000
   },
 
