@@ -1,0 +1,25 @@
+{
+    "name": "voting-smart-contract",
+    "version": "0.0.1",
+    "engines": {
+        "node": "11.7.x",
+        "npm": "6.5.x"
+    },
+    "devDependencies": {
+        "concurrently": "^4.1.0",
+        "ganache-cli": "^6.4.1",
+        "truffle": "^5.0.7"
+    },
+    "scripts": {
+        "ganache": "ganache-cli --networkId $npm_package_config_ganache_networkId --allowUnlimitedContractSize --gasLimit $npm_package_config_ganache_gasLimit --gasPrice $npm_package_config_ganache_gasPrice --mnemonic \"$MNEMONIC\"",
+        "start": "concurrently \"npm run ganache\" \"npm run migrate\"",
+        "migrate": "rm -rf build && truffle migrate --reset --compile-all --network development"
+    },
+    "config": {
+        "ganache": {
+            "networkId": 3431,
+            "gasPrice": 25000000000,
+            "gasLimit": 6500000
+        }
+    }
+}
