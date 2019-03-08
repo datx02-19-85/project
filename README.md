@@ -12,3 +12,20 @@ TODO:
 - [ ] A small voting prototype
 - [ ] Travic CI?
 
+## How to run
+
+There is multiple scripts in package.json that is able to start the system in different ways.
+
+To run at the moment just type
+
+```
+npm run start
+```
+
+to use graphical ganache install instead, use
+```
+truffle migrate --network graphical
+```
+HOWEVER using exactly that command requires truffle to be installed globally.
+
+This text will be changed over time
