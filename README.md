@@ -4,30 +4,62 @@
 
 This repo is used to store all of our smart contracts and test cases.
 
-The boilerplate code is from this [repo](https://github.com/tylerjohnhaden/__truffle-boilerplate)
-following this [guide](https://blog.ippon.tech/creating-your-first-truffle-project-part-2-of-2/) to understand the repo.
+## Current smart contracts:
+Vote - is our first contract to try out different possabilities. Read more [here](/documents/vote.md)
 
-TODO:
-- [ ] Add "how to run"
-- [ ] Fill out the readme
-- [ ] Set correct license
-- [ ] A small voting prototype
-- [x] CI
+more to come...
 
 ## How to run
 
-There is multiple scripts in package.json that is able to start the system in different ways.
+#### Requirements
+ - node.js version ^11.7.*
 
-To run at the moment just type
+Open up a Unix terminal and execute these commands:
 
+```
+git clone https://github.com/datx02-19-85/contracts.git
+```
+```
+cd contracts
+```
+Now we want to install all the dependencies given by the [package.json](package.json):
+```
+npm install
+```
+Now there is multiple options.
+
+#### Run code locally with ganache-cli
+This project contains ganache-cli so that all the tests and code can run without any other installations needed. To setup a locally running blockchain with the smart contracts inside this project just run
 ```
 npm run start
 ```
-
-to use graphical ganache install instead, use
+This command will start a ganache server running in your terminal window and migrate the contracts. It is also possible to run the **tests** using this environment 
 ```
-truffle migrate --network graphical
+npm run test
 ```
-HOWEVER using exactly that command requires truffle to be installed globally.
 
-This text will be changed over time
+#### Run code locally with Ganache 
+At this time there is no npm script to do this. Instead if you have truffle installed locally on your computer you can use the graphical Ganache server by using
+```
+truffle <command> --network graphical
+```
+this should work for all types of truffle commands you want, eg migrate, test etc.
+
+## How to create a smart contract
+To make a smart contract you just create a new .sol file inside the [/contracts](/contracts/) folder. To be able to migrate new contracts to the chain they also need to be added inside the [deploy script](/migrations/2_deploy_contracts.js). 
+
+
+Describe the different smart contracts added by linking to a separate markdown file inside the [/documents](/documents/) folder. Put your links at the top of this readme.
+
+## More information about the repo
+Our boilerplate code is from this [repo](https://github.com/tylerjohnhaden/__truffle-boilerplate)
+following this [guide](https://blog.ippon.tech/creating-your-first-truffle-project-part-2-of-2/) to understand the code.
+
+TODO:
+- [x] Add "how to run"
+- [x] Fill out the readme
+- [x] CI
+- [ ] Set correct license
+- [ ] A small voting prototype
+
+... more todos will be added over time
