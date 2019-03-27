@@ -29,7 +29,15 @@ var networkId = process.env.npm_package_config_ganache_networkId;
 var gasPrice = process.env.npm_package_config_ganache_gasPrice;
 var gasLimit = process.env.npm_package_config_ganache_gasLimit;
 
+const path = require("path");
+
 module.exports = {
+
+  /**
+   * Changing build directory to putting contracts inside the react-app
+   */
+  contracts_build_directory: path.join(__dirname, "client/src/contracts"),
+
   /**
    * Networks define how you connect to your ethereum client and let you set the
    * defaults web3 uses to send transactions. If you don't specify one truffle
@@ -39,7 +47,6 @@ module.exports = {
    *
    * $ truffle test --network <network-name>
    */
-
   networks: {
     // Useful for testing. The `development` name is special - truffle uses it by default
     // if it's defined here and no other network is specified at the command line.
@@ -49,7 +56,7 @@ module.exports = {
     //
     development: {
       host: "127.0.0.1", // Localhost (default: none)
-      port: 8545, // Standard Ethereum port (default: none)
+      port: 7545, // Standard Ethereum port (default: none)
       network_id: networkId, // Any network (default: none)
       gas: gasLimit,
       gasPrice: gasPrice

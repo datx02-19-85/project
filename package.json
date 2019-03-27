@@ -5,7 +5,7 @@
     "node": "11.7.x",
     "npm": "6.5.x"
   },
-  "devDependencies": {
+  "dependencies": {
     "concurrently": "^4.1.0",
     "eth-gas-reporter": "^0.1.12",
     "ethlint": "^1.2.3",
@@ -15,9 +15,11 @@
     "truffle-test-utils": "^0.1.0"
   },
   "scripts": {
-    "ganache": "ganache-cli --networkId $npm_package_config_ganache_networkId --allowUnlimitedContractSize --gasLimit $npm_package_config_ganache_gasLimit --gasPrice $npm_package_config_ganache_gasPrice --mnemonic \"$MNEMONIC\"",
+    "build-all": "npm install && npm install --prefix client/",
+    "ganache": "ganache-cli --port 7545 --networkId $npm_package_config_ganache_networkId --allowUnlimitedContractSize --gasLimit $npm_package_config_ganache_gasLimit --gasPrice $npm_package_config_ganache_gasPrice --mnemonic \"$MNEMONIC\"",
     "start": "concurrently \"npm run ganache\" \"npm run migrate\"",
-    "migrate": "rm -rf build && truffle migrate --reset --compile-all --network development",
+    "migrate": "rm -rf client/src/contracts && truffle migrate --reset --compile-all --network development",
+    "migrate-g": "rm -rf client/src/contracts && truffle migrate --reset --compile-all --network graphical",
     "lint:sol": "solium -d ./contracts",
     "lint:sol:fix": "solium -d ./contracts --fix",
     "test": "concurrently \"npm run ganache\" \"npm run migrate && truffle test\" --kill-others --success first"
