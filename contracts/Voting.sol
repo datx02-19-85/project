@@ -1,6 +1,6 @@
 pragma solidity ^0.5.5;
 
-contract VoteShowingResult {
+contract Voting {
 
     mapping(string => address[]) private result;
     mapping(address => uint) public voters;

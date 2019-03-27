@@ -10,7 +10,7 @@ class ShowingStatus extends Component {
 
     componentDidMount() {
         const { drizzle } = this.props
-        const contract = drizzle.contracts.VoteShowingResult
+        const contract = drizzle.contracts.Voting
 
         const dataKey = contract.methods["didVote"].cacheCall()
         this.setState({ dataKey })

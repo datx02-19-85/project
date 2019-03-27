@@ -9,7 +9,7 @@ class ShowingParties extends Component {
 
     componentDidMount() {
         const { drizzle } = this.props
-        const contract = drizzle.contracts.VoteShowingResult
+        const contract = drizzle.contracts.Voting
 
         // const dataKey = contract.methods["parties"].cacheCall()
         // this.setState({ dataKey })

@@ -2,18 +2,18 @@ pragma solidity ^0.5.5;
 
 import "truffle/Assert.sol";
 import "truffle/DeployedAddresses.sol";
-import "../contracts/VoteShowingResult.sol";
+import "../contracts/Voting.sol";
 
-contract TestVoteShowingResult {
+contract TestVoting {
     // The address of the vote contract to be tested
-    VoteShowingResult vote = VoteShowingResult(DeployedAddresses.VoteShowingResult());
+    Voting vote = Voting(DeployedAddresses.Voting());
     string private party = "Kalleanka partiet";
 
     function testCanSenderVote()
     public
     {
-        bool did_i_vote = vote.didVote();
-        Assert.isFalse(did_i_vote, "Sender should not have voted at this time");
+        bool didIVote = vote.didVote();
+        Assert.isFalse(didIVote, "Sender should not have voted at this time");
     }
 
     function testVote()
@@ -21,8 +21,8 @@ contract TestVoteShowingResult {
     {
         vote.vote(party);
 
-        bool did_i_vote = vote.didVote();
-        Assert.isTrue(did_i_vote, "Sender should have voted");
+        bool didIVote = vote.didVote();
+        Assert.isTrue(didIVote, "Sender should have voted");
     }
 
     function testShowingResultOnParty()
@@ -50,7 +50,7 @@ contract TestVoteShowingResult {
 
         vote.vote(party);
         uint newVotes = vote.votesOnParty(party);
-        Assert.equal(votes, newVotes ,"Should be same since senders are not able to vote twice.");
+        Assert.equal(votes, newVotes, "Should be same since senders are not able to vote twice.");
     }
 
 
