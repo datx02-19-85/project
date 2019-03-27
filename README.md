@@ -5,7 +5,8 @@
 This repo is used to store all of our smart contracts and test cases.
 
 ## Current smart contracts:
-Vote - is our first contract to try out different possabilities. Read more [here](/documents/vote.md)
+- Vote - is our first contract to try out different possabilities. Read more [here](/documents/vote.md)
+- Voting - a first implementation of voting. Read more [here](/documents/voting.md)
 
 more to come...
 
