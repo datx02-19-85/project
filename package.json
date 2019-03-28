@@ -6,23 +6,29 @@
     "npm": "6.5.x"
   },
   "devDependencies": {
+    "babel-eslint": "^10.0.1",
     "concurrently": "^4.1.0",
     "eth-gas-reporter": "^0.1.12",
     "ethlint": "^1.2.3",
     "ganache-cli": "^6.4.1",
     "husky": "^1.3.1",
+    "lint-staged": "^8.1.5",
+    "npm-run-all": "^4.1.5",
     "truffle": "^5.0.7",
     "truffle-test-utils": "^0.1.0",
-    "npm-run-all": "^4.1.5",
-    "ttab": "^0.6.1"
+    "eslint": "^5.15.3",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react": "^7.12.4",
+    "prettier": "^1.16.4",
+    "pretty-quick": "^1.10.0"
   },
   "scripts": {
-    "build:all": "npm install && npm install --prefix client/",
     "ganache": "ganache-cli --port 7545 --networkId $npm_package_config_ganache_networkId --allowUnlimitedContractSize --gasLimit $npm_package_config_ganache_gasLimit --gasPrice $npm_package_config_ganache_gasPrice --mnemonic \"$MNEMONIC\"",
     "start": "concurrently \"npm run ganache\" \"npm run migrate\"",
-    "tab:block": "ttab -t 'Ganache-CLI' npm run start",
-    "tab:react": "ttab -t 'React' npm start --prefix client/",
-    "start:all": "run-s tab:block tab:react",
     "migrate": "rm -rf client/src/contracts && truffle migrate --reset --compile-all --network development",
     "migrate:g": "rm -rf client/src/contracts && truffle migrate --reset --compile-all --network graphical",
     "lint:sol": "solium -d ./contracts",
@@ -38,7 +44,14 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "truffle compile && npm run lint:sol"
+      "pre-commit": "truffle compile && npm run lint:sol && lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "pretty-quick --staged",
+      "eslint client/src --fix",
+      "git add"
+    ]
   }
 }
