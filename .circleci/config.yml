@@ -20,7 +20,7 @@ jobs:
           name: contract test
           command: |
             npm install
-            npm run lin:sol
+            npm run lint:sol
             npm run test
 
       - run:
