@@ -27,5 +27,5 @@ jobs:
           name: react test
           command: |
             npm --prefix client/ install
-            npm lint:react
-            npm test:react
+            npm run lint:react
+            npm run test:react
