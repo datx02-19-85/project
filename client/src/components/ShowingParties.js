@@ -7,6 +7,9 @@ class ShowingParties extends Component {
   }
 
   componentDidMount() {
+    /**
+     * This code is just here as a template at this moment. When working in it, remove this code.
+     */
     const { drizzle } = this.props;
     const contract = drizzle.contracts.Voting;
     console.log(contract);

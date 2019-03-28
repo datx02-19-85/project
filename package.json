@@ -33,7 +33,9 @@
     "migrate:g": "rm -rf client/src/contracts && truffle migrate --reset --compile-all --network graphical",
     "lint:sol": "solium -d ./contracts",
     "lint:sol:fix": "solium -d ./contracts --fix",
-    "test": "concurrently \"npm run ganache\" \"npm run migrate && truffle test\" --kill-others --success first"
+    "test": "concurrently \"npm run ganache\" \"npm run migrate && truffle test\" --kill-others --success first",
+    "lint:react": "eslint client/src && pretty-quick",
+    "test:react": "npm run --prefix client/ test:staged"
   },
   "config": {
     "ganache": {
@@ -44,7 +46,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "truffle compile && npm run lint:sol && lint-staged"
+      "pre-commit": "truffle compile && npm run lint:sol && lint-staged && npm run test:react"
     }
   },
   "lint-staged": {

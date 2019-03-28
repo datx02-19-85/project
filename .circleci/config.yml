@@ -16,6 +16,16 @@ jobs:
 
     steps:
       - checkout
-      - run: npm install
-      - run: npm run lint:sol
-      - run: npm run test
+      - run:
+        name: contract test
+        command: |
+          npm install
+          npm run lin:sol
+          npm run test
+
+      - run:
+        name: react test
+        command: |
+          npm --prefix client/ install
+          npm lint:react
+          npm test:react
