@@ -17,15 +17,15 @@ jobs:
     steps:
       - checkout
       - run:
-        name: contract test
-        command: |
-          npm install
-          npm run lin:sol
-          npm run test
+          name: contract test
+          command: |
+            npm install
+            npm run lin:sol
+            npm run test
 
       - run:
-        name: react test
-        command: |
-          npm --prefix client/ install
-          npm lint:react
-          npm test:react
+          name: react test
+          command: |
+            npm --prefix client/ install
+            npm lint:react
+            npm test:react
