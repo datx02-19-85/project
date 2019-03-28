@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/datx02-19-85/contracts.svg?style=svg)](https://circleci.com/gh/datx02-19-85/contracts)
+[![CircleCI](https://circleci.com/gh/datx02-19-85/contracts.svg?style=shield)](https://circleci.com/gh/datx02-19-85/contracts)
 
 # Contracts
 
