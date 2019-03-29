@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Import drizzle, drizzle-react, and your contract artifacts.
 import { Drizzle, generateStore } from 'drizzle';
