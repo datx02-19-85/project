@@ -1,79 +1,52 @@
 pragma solidity ^0.5.5;
 
 contract Voting {
+    address private owner;
 
-    mapping(string => address[]) private result;
-    mapping(address => uint) public voters;
-    string[] public parties;
+    mapping(string => Vote) private votes;
+    string[] public voters;
 
-    // constructor(bytes32[] memory parties) public {
-        // We want to be able to make this type of constructor to work BUT
-        // using bytes32[] will require us to pass a certain type of data 
-        // when migrating
-        // See: https://ethereum.stackexchange.com/questions/43751/does-solidity-support-passing-an-array-of-strings-to-a-contracts-constructor-ye
-    // }
+    enum VotingEligibility { No, Yes }
+
+    struct Vote {
+        bool eligibleToVote;
+        string on;
+    }
 
     constructor()
     public 
     {
-        parties.push("Moderaterna");
-        parties.push("Socialdemokraterna");
-        parties.push("Kalleanka partiet");
+        owner = msg.sender;
     }
 
-    modifier eligibleToVote {
-        require(!didVote());
+    modifier eligibleToPerform {
+        require(msg.sender == owner, "This sender cannot access voting functions.");
         _;
     }
 
-    function vote(string memory party)
-    public eligibleToVote
+    function vote(string memory id, string memory voteData)
+    public eligibleToPerform
     {
-        require(partyExists(party), "Party is not in this vote");
+        Vote memory vote = votes[id];
+        require(!vote.eligibleToVote, "This ID already voted!");
 
-        voters[msg.sender] = 1;
-        result[party].push(msg.sender);
+        vote.on = voteData;
+        vote.eligibleToVote = false;
+        votes[id] = vote;
     }
 
-    function didVote()
+    function addVoter(string memory id)
+    public eligibleToPerform
+    {
+        Vote memory vote = Vote(true, "");
+        votes[id] = vote;
+    }
+
+    function isAbleToVote(string memory id)
     public view
     returns (bool)
     {
-        return (voters[msg.sender] == 1);
-    }
-
-    function partyExists(string memory party)
-    public view
-    returns (bool)
-    {
-        for (uint i = 0; i < parties.length; i++) {
-            if (compareStringsByBytes(parties[i], party)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function votesOnParty(string memory party)
-    public view
-    returns (uint)
-    {
-        require(partyExists(party), "Party is not in this vote");
-
-        uint votesOnGivenParty = result[party].length;
-        return votesOnGivenParty;
-    }
-
-
-    function compareStringsByBytes
-    (
-        string memory s1, 
-        string memory s2
-    ) 
-    private pure 
-    returns(bool)
-    {
-        return keccak256(abi.encodePacked(s1)) == keccak256(abi.encodePacked(s2));
+        return votes[id].eligibleToVote;
     }
 
 }

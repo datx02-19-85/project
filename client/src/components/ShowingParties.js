@@ -3,28 +3,37 @@ import React, { Component } from 'react';
 class ShowingParties extends Component {
   constructor(props) {
     super(props);
-    this.state = { dataKey: null };
+    this.state = {
+      parties: null
+    };
   }
 
-  componentDidMount() {
-    /**
-     * This code is just here as a template at this moment. When working in it, remove this code.
-     */
+  async componentDidMount() {
+    const { parties } = this.state;
+    if (parties) return;
+
     const { drizzle } = this.props;
     const contract = drizzle.contracts.Voting;
-    console.log(contract);
 
-    const { dataKey } = this.state;
-    console.log(dataKey);
+    const nParties = await contract.methods.getNumberOfParties().call();
 
-    // const dataKey = contract.methods["parties"].cacheCall()
-    // this.setState({ dataKey })
+    const promises = [];
+    for (let i = 0; i < nParties; i += 1) {
+      promises.push(contract.methods.parties(i).call());
+    }
+
+    Promise.all(promises).then(response => {
+      this.state = { parties: { response } };
+    });
   }
 
   render() {
+    const { parties } = this.state;
+    if (!parties) return '';
+
     return (
       <div>
-        <h4>Party</h4>
+        <h4>Number of parties: {parties.length}</h4>
       </div>
     );
   }
