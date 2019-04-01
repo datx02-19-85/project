@@ -32,7 +32,6 @@ var gasLimit = process.env.npm_package_config_ganache_gasLimit;
 const path = require("path");
 
 module.exports = {
-
   /**
    * Changing build directory to putting contracts inside the react-app
    */
@@ -99,10 +98,12 @@ module.exports = {
 
   // Set default mocha options here, use special reporters etc.
   mocha: {
+    enableTimeouts: false,
     reporter: "eth-gas-reporter",
-    reporterOptions : {
+    reporterOptions: {
       currency: "SEK", // change this if you want to change currency. Using Swedish krona
-      gasPrice: 2
+      gasPrice: 2,
+      showTimeSpent: true
     }
     // timeout: 100000
   },
@@ -119,9 +120,9 @@ module.exports = {
         // Change this value if we want to experiment with ALOT of votes for example
         // See more information about this value on:
         // https://solidity.readthedocs.io/en/develop/using-the-compiler.html#using-the-compiler
-      },
+      }
       //  evmVersion: "byzantium"
       // }
     }
   }
-}
+};
