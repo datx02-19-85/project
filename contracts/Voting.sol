@@ -5,6 +5,9 @@ contract Voting {
     string public trueKey = "false";
     string public myString = "abc123";
     
+    string private privateKey;
+    string public publicKey;
+    uint public endingTime;
 
     mapping(string => Vote) private votes;
     string[] public voters;
@@ -20,6 +23,10 @@ contract Voting {
     public 
     {
         owner = msg.sender;
+        endingTime = now + 30;
+        privateKey = "hello";
+        publicKey = "Not hello";
+
     }
 
     modifier eligibleToPerform {
@@ -27,22 +34,49 @@ contract Voting {
         _;
     }
 
+    modifier voteEnded {
+        require(now >= endingTime, "Not able to get PrivateKey yet. Vote have not ended");
+        _;
+    }
+
     function vote(string memory id, string memory voteData)
     public eligibleToPerform
     {
-        Vote memory vote = votes[id];
-        require(!vote.eligibleToVote, "This ID already voted!");
+        Vote memory userVote = votes[id];
+        require(userVote.eligibleToVote, "This ID already voted!");
 
-        vote.on = voteData;
-        vote.eligibleToVote = false;
-        votes[id] = vote;
+        userVote.on = voteData;
+        userVote.eligibleToVote = false;
+        votes[id] = userVote;
     }
 
     function addVoter(string memory id)
     public eligibleToPerform
     {
-        Vote memory vote = Vote(true, "");
-        votes[id] = vote;
+        Vote memory userVote = Vote(true, "");
+        votes[id] = userVote;
+        voters.push(id);
+    }
+
+    function getNow() 
+    public view
+    returns (uint)
+    {
+        return now;
+    }
+
+    function getNumberOfVoters()
+    public view
+    returns (uint)
+    {
+        return voters.length;
+    }
+
+    function getPrivateKey()
+    public view voteEnded
+    returns (string memory)
+    {
+        return privateKey;
     }
 
     function isAbleToVote(string memory id)
