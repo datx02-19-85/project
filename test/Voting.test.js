@@ -21,11 +21,92 @@ contract("Voting", accounts => {
     assert(ableToVote, "Voter should be able to vote");
   });
 
+  it("Should not add voter", async () => {
+    try {
+      await instance.addVoter("a_voter", { from: account });
+      assert(false, "Sender should not be able to add voter");
+    } catch (error) {
+      assert(true);
+    }
+  });
+
   it("Should not be able to Vote", async () => {
     const voter = "voter2";
 
     const ableToVote = await instance.isAbleToVote(voter);
 
     assert(!ableToVote, "Voter should not be able to vote");
+  });
+
+  it("Should vote", async () => {
+    const voter = "voter3";
+    await instance.addVoter(voter, { from: owner });
+
+    await instance.vote(voter, "test");
+
+    // Check if it went through
+    const ableToVote = await instance.isAbleToVote(voter);
+    assert(!ableToVote, "Voter should not be able to vote again");
+  });
+
+  it("Should not be able to vote twice", async () => {
+    const voter = "voter4";
+    await instance.addVoter(voter, { from: owner });
+
+    await instance.vote(voter, "test");
+
+    try {
+      await instance.vote(voter, "test again");
+    } catch (error) {
+      assert(true, "Voter should not be able to vote twice");
+    }
+  });
+
+  it("Should get numbers of voters", async () => {
+    const voter = "voter5";
+    await instance.addVoter(voter, { from: owner });
+
+    const nVoters = await instance.getNumberOfVoters();
+    assert(nVoters > 0, "There should be atleast 1 voter");
+  });
+
+  it("Should not be able to get private key", async () => {
+    try {
+      const key = await instance.getPrivateKey();
+      assert(false, "Should not be able to get key at this point");
+    } catch (error) {
+      assert(true);
+    }
+  });
+
+  it("Should be able to get private key", async () => {
+    // This one need to be fixed
+  });
+
+  /**
+   * This test is used to simulate a large amount of votes.
+   * Change nVotes to an arbitrary number, however more then 2000
+   * will make the test unstable.
+   */
+  it("Make big amount of votes", async () => {
+    const nVotes = 3;
+
+    const allPromises = [];
+    for (let i = 0; i < nVotes; i++) {
+      const voter = `__Voter__${i}`;
+      allPromises.push(
+        instance
+          .addVoter(voter, { from: owner })
+          .then(instance.vote(voter, "test_vote"))
+      );
+    }
+
+    await Promise.all(allPromises);
+    const nVoter = await instance.getNumberOfVoters();
+
+    assert(
+      nVoter >= nVotes,
+      "Number of votes should be bigger or equals number of voters"
+    );
   });
 });
