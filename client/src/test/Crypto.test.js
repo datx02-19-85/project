@@ -1,4 +1,4 @@
-import assert from 'assert'
+/* import assert from 'assert'
 import EthCrypto from 'eth-crypto'
 import encryptVote from '../utils/EncryptVote'
 import decryptVote from '../utils/DecryptVote'
@@ -18,4 +18,4 @@ it('Should return true if encryption and decryption worked', async () => {
     const encryptedVote = await encryptVote(publicKey, party);
     const decryptedVote = await decryptVote(privateKey, encryptedVote);
     assert.strictEqual(party, decryptedVote, 'Encryption and decryption worked');
-});
+}); */

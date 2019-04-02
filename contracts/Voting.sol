@@ -2,6 +2,7 @@ pragma solidity ^0.5.5;
 
 contract Voting {
     address private owner;
+    string public myString = "0";
 
     mapping(string => Vote) private votes;
     string[] public voters;
@@ -47,6 +48,10 @@ contract Voting {
     returns (bool)
     {
         return votes[id].eligibleToVote;
+    }
+
+    function set(string memory x) public {
+        myString = x;
     }
 
 }
