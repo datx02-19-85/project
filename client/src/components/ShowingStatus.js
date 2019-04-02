@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Verifier from './Verifier';
 
 class ShowingStatus extends Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class ShowingStatus extends Component {
 
   render() {
     // get the contract state from drizzleState
+    <Verifier/>
     const {
       drizzleState: {
         contracts: { Voting }
