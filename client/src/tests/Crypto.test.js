@@ -17,5 +17,6 @@ beforeAll(() => {
 it('Should return true if encryption and decryption worked', async () => {
   const encryptedVote = await encryptVote(publicKey, party);
   const decryptedVote = await decryptVote(privateKey, encryptedVote);
+
   assert.strictEqual(party, decryptedVote, 'Encryption and decryption worked');
 });
