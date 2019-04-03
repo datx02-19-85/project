@@ -1,82 +1,104 @@
 [![CircleCI](https://circleci.com/gh/datx02-19-85/project.svg?style=shield)](https://circleci.com/gh/datx02-19-85/project)
 
-# Contracts
+# Ethereum voting
 
-This repo is used to store all of our smart contracts and test cases.
+A description will be added shortly...
 
 ## Current smart contracts:
-- Vote - is our first contract to try out different possabilities. Read more [here](/documents/vote.md)
-- Voting - a first implementation of voting. Read more [here](/documents/voting.md)
 
-more to come...
+- [Vote](/documents/vote.md) - is our first contract to try out different possibilities.
+- [Voting](/documents/voting.md) - a first implementation of voting.
 
-## How to run
+More to come...
 
-#### Requirements
- - node.js version ^11.7.*
+## Requirements
 
-Open up a Unix terminal and execute these commands:
+- node.js version ^11.7.\*
+
+## Setup project
+
+Clone the repo:
 
 ```
-git clone https://github.com/datx02-19-85/contracts.git
+$ git clone https://github.com/datx02-19-85/contracts.git
 ```
+
+Install all the dependencies:
+
 ```
-cd contracts
+$ npm install && cd client/ && npm install && cd ..
 ```
-Now we want to install all the dependencies given by the [package.json](package.json):
-```
-npm install
-```
-Now there is multiple options.
 
 #### Run code locally with ganache-cli
-This project contains ganache-cli so that all the tests and code can run without any other installations needed. To setup a locally running blockchain with the smart contracts inside this project just run
+
+This project contains ganache-cli so that all the tests and code can run without any global installations needed. To setup a locally running blockchain with the smart contracts inside this project just run
+
 ```
-npm run start
-```
-This command will start a ganache server running in your terminal window and migrate the contracts. It is also possible to run the **tests** using this environment 
-```
-npm run test
+$ npm run start
 ```
 
-#### Run code locally with Ganache 
-At this time there is no npm script to do this. Instead if you have truffle installed locally on your computer you can use the graphical Ganache server by using
-```
-truffle <command> --network graphical
-```
-this should work for all types of truffle commands you want, eg migrate, test etc.
+This command will start a ganache server running in your terminal window and migrate the contracts. It is also possible to run the **tests** using this environment
 
-___
+```
+$ npm run test
+```
+
+#### Run code locally with Ganache
+
+In order to migrate to Ganache run:
+
+```
+$ npm run migrate:g
+```
+
+To run tests:
+
+```
+$ npm run test:g
+```
+
+For other command, run:
+
+```
+$ truffle <command> --network graphical
+```
+
+This should work for all types of truffle commands you want, eg migrate, test etc.
+
+## How to run frontend
+
+See [README](/client/README.md)
+
+---
 
 ## How to create a smart contract
-To make a smart contract you just create a new .sol file inside the [/contracts](/contracts/) folder. To be able to migrate new contracts to the chain they also need to be added inside the [deploy script](/migrations/2_deploy_contracts.js). 
 
+1. Create a new .sol file inside the [/contracts](/contracts/) folder
+2. Import contract inside the [deploy script](/migrations/2_deploy_contracts.js) to be able to migrate new contracts to the chain
+3. Create markdown file inside the [/documents](/documents/) folder
+4. Add description of the contracts
+5. Put link to description at the top of this readme (below "Current smart contracts")
 
-Describe the different smart contracts added by linking to a separate markdown file inside the [/documents](/documents/) folder. Put your links at the top of this readme.
-
-___
+---
 
 ## More information about the repo
+
 Our boilerplate code is from this [repo](https://github.com/tylerjohnhaden/__truffle-boilerplate)
 following this [guide](https://blog.ippon.tech/creating-your-first-truffle-project-part-2-of-2/) to understand the code.
 
-___
+---
 
 ## TODO:
-- [x] Add "how to run"
-  - [ ] Fix how to run all
-  - [ ] Fix how to run frontend
-- [x] Fill out the readme
-  - [ ] Edit readme with more and better information
-- [x] CI
-- [ ] Set correct license
-- [ ] A small voting prototype
-  - [x] Iteration 1 (be able to vote)
-  - [ ] Iteration 2 (show that you voted)
-  - [ ] Iteration 3 (more to come...)
-  - [ ] ...
-- [x] Add frontend client
-  - [ ] Create correct README
-  - [ ] Make link to frontend readme from here
 
-... more todos will be added over time
+- [ ] Set correct license for project
+- [ ] A small voting prototype
+  - [ ] Iteration 1: Be able to vote
+    - [ ] GUI for generating random hash ID for voters
+      - [ ] Add hash to contract to allow voter to vote
+    - [ ] GUI to display all political parties
+    - [ ] GUI for inputting hash ID
+    - [ ] Add vote to contract (vote)
+  - [ ] Iteration 2: Show that you voted
+  - [ ] ...
+
+More TODOs will be added shortly...
