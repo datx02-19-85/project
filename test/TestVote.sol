@@ -31,7 +31,7 @@ contract TestVote {
         Assert.isFalse(r, "What?! 1 is equal to 10?");
     }
 
-        function IThrow1() public pure {
+    function IThrow1() public pure {
         revert("I will throw");
     }
 
