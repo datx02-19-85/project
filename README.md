@@ -1,7 +1,7 @@
 [![CircleCI](https://circleci.com/gh/datx02-19-85/project.svg?style=shield)](https://circleci.com/gh/datx02-19-85/project)
 
 # Ethereum voting
-Description 
+A description will be added shortly...
 
 ## Current smart contracts:
 - [Vote](/documents/vote.md) - is our first contract to try out different possibilities. 
@@ -69,11 +69,12 @@ ___
 ## TODO:
 - [ ] Set correct license for project
 - [ ] A small voting prototype
-  - [x] Iteration 1: Be able to vote
+  - [ ] Iteration 1: Be able to vote
     - [ ] GUI for generating random hash ID for voters
       - [ ] Add hash to contract to allow voter to vote
     - [ ] GUI to display all political parties
-    - [ ] GUI for 
+    - [ ] GUI for inputting hash ID
+    - [ ] Add vote to contract (vote)
   - [ ] Iteration 2: Show that you voted
   - [ ] ...
 
