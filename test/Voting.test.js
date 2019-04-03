@@ -70,19 +70,6 @@ contract("Voting", accounts => {
     assert(nVoters > 0, "There should be atleast 1 voter");
   });
 
-  it("Should not be able to get private key", async () => {
-    try {
-      const key = await instance.getPrivateKey();
-      assert(false, "Should not be able to get key at this point");
-    } catch (error) {
-      assert(true);
-    }
-  });
-
-  it("Should be able to get private key", async () => {
-    // This one need to be fixed
-  });
-
   /**
    * This test is used to simulate a large amount of votes.
    * Change nVotes to an arbitrary number, however more then 2000
@@ -108,5 +95,22 @@ contract("Voting", accounts => {
       nVoter >= nVotes,
       "Number of votes should be bigger or equals number of voters"
     );
+  });
+
+  it("Should get time left of voting", async () => {
+    const timeLeft = await instance.getTimeLeft();
+    console.log("Time left is: ", timeLeft);
+
+    assert(timeLeft, "Time left should not be undefined");
+  });
+
+  it("Should get 0 because time passed voting time", async () => {
+    const response = await instance.getTimeLeft();
+    // Im not sure why we get an object as result.
+    // I guess its something about using js testing.
+    const timeLeft = response.words[0];
+    console.log("timeleft is ", timeLeft);
+
+    assert(timeLeft > 0, "timeLeft should be more then 0");
   });
 });

@@ -2,14 +2,13 @@ pragma solidity ^0.5.5;
 
 contract Voting {
     address private owner;
-    string private privateKey;
     string public publicKey;
     uint public endingTime;
+    bool public electionIsRunning;
+    uint public maxNumberOfVoters;
 
     mapping(string => Vote) private votes;
     string[] public voters;
-
-    enum VotingEligibility { No, Yes }
 
     struct Vote {
         bool eligibleToVote;
@@ -20,13 +19,13 @@ contract Voting {
     public 
     {
         owner = msg.sender;
-        endingTime = now + 30;
-        privateKey = "hello";
+        endingTime = now + 15;
         publicKey = "Not hello";
+        electionIsRunning = false;
 
     }
 
-    modifier eligibleToPerform {
+    modifier onlyOwner {
         require(msg.sender == owner, "This sender cannot access voting functions.");
         _;
     }
@@ -36,8 +35,28 @@ contract Voting {
         _;
     }
 
+    modifier notRunning {
+        require(electionIsRunning == false, "Vote should not be running");
+        _;
+    }
+
+    function startElection
+    (
+        string memory key, 
+        uint upTime, 
+        uint nVoters
+    )
+    public onlyOwner notRunning
+    returns (bool)
+    {
+        maxNumberOfVoters = nVoters;
+        publicKey = key;
+        endingTime = (now + upTime);
+        electionIsRunning = true;
+    }
+
     function vote(string memory id, string memory voteData)
-    public eligibleToPerform
+    public onlyOwner
     {
         Vote memory userVote = votes[id];
         require(userVote.eligibleToVote, "This ID already voted!");
@@ -48,7 +67,7 @@ contract Voting {
     }
 
     function addVoter(string memory id)
-    public eligibleToPerform
+    public onlyOwner
     {
         Vote memory userVote = Vote(true, "");
         votes[id] = userVote;
@@ -69,11 +88,11 @@ contract Voting {
         return voters.length;
     }
 
-    function getPrivateKey()
-    public view voteEnded
-    returns (string memory)
+    function getTimeLeft()
+    public view
+    returns (int)
     {
-        return privateKey;
+        return int(endingTime) - int(now);
     }
 
     function isAbleToVote(string memory id)
