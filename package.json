@@ -56,5 +56,12 @@
       "eslint client/src --fix",
       "git add"
     ]
+  },
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "react": "^16.8.6",
+    "react-center": "^1.1.1",
+    "react-dom": "^16.8.6",
+    "reactstrap": "^7.1.0"
   }
 }
