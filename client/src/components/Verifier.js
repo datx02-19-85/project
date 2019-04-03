@@ -94,6 +94,7 @@ class Verifier extends React.Component {
         <div className="d-flex justify-content-center">
           {this.getTxStatus()}
         </div>
+        <div>Key status: {value != null ? value.value.toString() : ''}</div>
       </div>
     );
   }
