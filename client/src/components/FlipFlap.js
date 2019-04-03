@@ -18,6 +18,7 @@ const FlipFlap = props => {
         borderColor="#dddddd"
         borderWidth="1px"
         characterSet={[
+          '.',
           'a',
           'b',
           'c',
@@ -53,12 +54,11 @@ const FlipFlap = props => {
           '6',
           '7',
           '8',
-          '9',
-          '.'
+          '9'
         ]}
         characterWidth="undefined"
         fontSize="2em"
-        step={100}
+        step={75}
         textColor="#dddddd"
         value={name}
       />

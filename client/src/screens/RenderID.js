@@ -20,7 +20,9 @@ class RenderID extends Component {
   };
 
   render() {
+    // const { drizzle, drizzleState } = this.props;
     const { state, genHash } = this;
+
     return (
       <div
         className="d-flex flex-column"

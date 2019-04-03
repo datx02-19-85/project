@@ -6,7 +6,7 @@ import RenderID from './screens/RenderID';
 export default () => (
   <DrizzleContext.Consumer>
     {drizzleContext => {
-      const { /* drizzle, drizzleState, */ initialized } = drizzleContext;
+      const { drizzle, drizzleState, initialized } = drizzleContext;
 
       if (!initialized) {
         // TODO: Show a nice screen. Maybe even catch why this is showing.
@@ -18,7 +18,7 @@ export default () => (
         <VotingApp
           drizzle={drizzle}
           drizzleState={drizzleState} /> */
-        <RenderID />
+        <RenderID drizzle={drizzle} drizzleState={drizzleState} />
       );
     }}
   </DrizzleContext.Consumer>
