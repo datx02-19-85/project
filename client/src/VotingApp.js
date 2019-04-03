@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import Verifier from './components/Verifier';
+import Read from './components/Read';
 // import ShowingStatus from './components/ShowingStatus';
 // import ShowingParties from './components/ShowingParties';
 
@@ -12,6 +13,7 @@ class VotingApp extends PureComponent {
         {/* <ShowingStatus drizzle={drizzle} drizzleState={drizzleState} />
         <ShowingParties drizzle={drizzle} drizzleState={drizzleState} /> */}
         <Verifier drizzle={drizzle} drizzleState={drizzleState} />
+        <Read drizzle={drizzle} drizzleState={drizzleState} />
       </div>
     );
   }

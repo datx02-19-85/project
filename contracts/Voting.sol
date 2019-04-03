@@ -2,7 +2,9 @@ pragma solidity ^0.5.5;
 
 contract Voting {
     address private owner;
-    string public myString = "0";
+    string public trueKey = "false";
+    string public myString = "abc123";
+    
 
     mapping(string => Vote) private votes;
     string[] public voters;
@@ -50,8 +52,29 @@ contract Voting {
         return votes[id].eligibleToVote;
     }
 
-    function set(string memory x) public {
-        myString = x;
+    function set(string memory x) 
+    public 
+    {
+        if (compareStringsByBytes(x, myString)) {
+            trueKey = "true";
+            myString = "true";
+        } else {
+            trueKey = "false";
+            myString = "false";
+        }
     }
+
+    function compareStringsByBytes
+    (
+        string memory s1,
+        string memory s2
+    ) 
+    private pure 
+        returns(bool)
+    {
+        return keccak256(abi.encodePacked(s1)) == keccak256(abi.encodePacked(s2));
+    }
+
+
 
 }

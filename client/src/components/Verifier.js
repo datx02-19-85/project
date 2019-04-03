@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'reactstrap';
 
 class Verifier extends React.Component {
   constructor() {
@@ -60,14 +61,31 @@ class Verifier extends React.Component {
     const { count } = this.state;
     return (
       <div>
-        Your key:{' '}
-        <input type="text" className="voteInput" onChange={this.handleSubmit} />
-        <h1 className="key">{count}</h1>
-        <button onClick={this.handleChange} className="button" type="submit">
-          {' '}
-          Verify{' '}
-        </button>
-        <div>{this.getTxStatus()}</div>
+        <div className="d-flex justify-content-center">Your key: </div>
+        <div className="d-flex justify-content-center">
+          <input
+            type="text"
+            className="voteInput"
+            onChange={this.handleSubmit}
+          />
+        </div>
+        <div className="d-flex justify-content-center">
+          <Button
+            color="primary"
+            onClick={this.handleChange}
+            className="button"
+            type="submit"
+          >
+            {' '}
+            Verify{' '}
+          </Button>
+        </div>
+        <div className="d-flex justify-content-center">
+          <h1 className="key">{count}</h1>
+        </div>
+        <div className="d-flex justify-content-center">
+          {this.getTxStatus()}
+        </div>
       </div>
     );
   }

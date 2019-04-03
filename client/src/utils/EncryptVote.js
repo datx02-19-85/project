@@ -2,6 +2,7 @@ import EthCrypto from 'eth-crypto';
 
 /*
  * @param Contract public-key, selected party
+ * @return String
  */
 async function encryptVote(publicKey, party) {
   const encryptedVoteObject = await EthCrypto.encryptWithPublicKey(
