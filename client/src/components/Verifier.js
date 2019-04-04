@@ -19,7 +19,7 @@ class Verifier extends React.Component {
     const contract = drizzle.contracts.Voting;
 
     // let drizzle know we want to call the `set` method with `value`
-    const stackId = contract.methods.set.cacheSend(value, {
+    const stackId = contract.methods.isAbleToVote.cacheCall(value, {
       from: drizzleState.accounts[0]
     });
 
@@ -58,6 +58,14 @@ class Verifier extends React.Component {
   }
 
   render() {
+    const { drizzleState } = this.props;
+
+    const contract = drizzleState.contracts.Voting;
+    const { stackId } = this.state;
+    const value = contract.isAbleToVote[stackId];
+
+    if (value) console.log('value is ', value.value);
+
     const { count } = this.state;
     return (
       <div>
@@ -86,6 +94,7 @@ class Verifier extends React.Component {
         <div className="d-flex justify-content-center">
           {this.getTxStatus()}
         </div>
+        <div>Key status: {value != null ? value.value.toString() : ''}</div>
       </div>
     );
   }
