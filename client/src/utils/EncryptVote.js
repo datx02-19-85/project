@@ -5,13 +5,18 @@ import EthCrypto from 'eth-crypto';
  * @return String
  */
 async function encryptVote(publicKey, party) {
-  const encryptedVoteObject = await EthCrypto.encryptWithPublicKey(
+  const encryptedObject = await EthCrypto.encryptWithPublicKey(
     publicKey,
     JSON.stringify(party)
   );
 
-  // Convert the object into a smaller string-representation
-  return EthCrypto.cipher.stringify(encryptedVoteObject);
+  // Convert the object into a smaller string
+  const string = EthCrypto.cipher.stringify(encryptedObject);
+
+  // Compress string to hex
+  const compressed = EthCrypto.hex.compress(string);
+
+  return compressed;
 }
 
 export default encryptVote;
