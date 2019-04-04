@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import getParties from '../utils/PartyCollector';
 
 class ShowingParties extends Component {
   constructor(props) {
@@ -13,29 +14,13 @@ class ShowingParties extends Component {
     if (parties) return;
 
     const { drizzle } = this.props;
-    const contract = drizzle.contracts.Voting;
+    const p = await getParties(drizzle);
 
-    const nParties = await contract.methods.getNumberOfParties().call();
-
-    const promises = [];
-    for (let i = 0; i < nParties; i += 1) {
-      promises.push(contract.methods.parties(i).call());
-    }
-
-    Promise.all(promises).then(response => {
-      this.state = { parties: { response } };
-    });
+    console.info(p);
   }
 
   render() {
-    const { parties } = this.state;
-    if (!parties) return '';
-
-    return (
-      <div>
-        <h4>Number of parties: {parties.length}</h4>
-      </div>
-    );
+    return <div />;
   }
 }
 

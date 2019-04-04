@@ -8,8 +8,15 @@ contract("Voting", accounts => {
   const owner = accounts[0];
   const account = accounts[1];
 
+  before(async () => {
+    // instance = await Voting.deployed();
+    // await instance.startElection("public key", 1500, 50);
+  });
+
   beforeEach(async () => {
     instance = await Voting.deployed();
+    await instance.stopElection("some eky");
+    await instance.startElection("public key", 0, 30);
   });
 
   it("Should add voter", async () => {
@@ -97,6 +104,10 @@ contract("Voting", accounts => {
     );
   });
 
+  /**
+   * This test is not used correctly if this comment is present.
+   * endingTime variable in contract is not used.
+   */
   it("Should get time left of voting", async () => {
     const timeLeft = await instance.getTimeLeft();
     console.log("Time left is: ", timeLeft);
@@ -104,6 +115,9 @@ contract("Voting", accounts => {
     assert(timeLeft, "Time left should not be undefined");
   });
 
+  /**
+   * See comment for test above
+   */
   it("Should get 0 because time passed voting time", async () => {
     const response = await instance.getTimeLeft();
     // Im not sure why we get an object as result.

@@ -2,12 +2,12 @@ pragma solidity ^0.5.5;
 
 contract Voting {
     address private owner;
-    string public trueKey = "false";
-    string public myString = "abc123";
     
-    string private privateKey;
     string public publicKey;
-    uint public endingTime;
+    string private privateKey; 
+
+    uint public endingTime; // not used at this point
+
     bool public electionIsRunning;
     uint public maxNumberOfVoters;
 
@@ -23,10 +23,10 @@ contract Voting {
     public 
     {
         owner = msg.sender;
-        endingTime = now + 15;
+        endingTime = 0;
         publicKey = "Not hello";
         electionIsRunning = false;
-
+        privateKey = "";
     }
 
     modifier onlyOwner {
@@ -35,12 +35,20 @@ contract Voting {
     }
 
     modifier voteEnded {
-        require(now >= endingTime, "Not able to get PrivateKey yet. Vote have not ended");
+        //require(now >= endingTime, "Not able to get PrivateKey yet. Vote have not ended");
+        require(true, "");
         _;
     }
 
     modifier notRunning {
         require(electionIsRunning == false, "Vote should not be running");
+        _;
+    }
+
+    modifier running {
+        require(electionIsRunning == true, "Vote should be running");
+        //require(now <= endingTime, "Voting time is elapsed");
+        require(maxNumberOfVoters > voters.length, "Max numbers of voters reached");
         _;
     }
 
@@ -51,16 +59,27 @@ contract Voting {
         uint nVoters
     )
     public onlyOwner notRunning
-    returns (bool)
     {
+        clearElection();
         maxNumberOfVoters = nVoters;
         publicKey = key;
         endingTime = (now + upTime);
         electionIsRunning = true;
     }
 
+    function stopElection
+    (
+        string memory key
+    )
+    public onlyOwner voteEnded
+    {
+        endingTime = 0;
+        electionIsRunning = false;
+        privateKey = key;
+    }
+
     function vote(string memory id, string memory voteData)
-    public onlyOwner
+    public onlyOwner running
     {
         Vote memory userVote = votes[id];
         require(userVote.eligibleToVote, "This ID already voted!");
@@ -71,64 +90,48 @@ contract Voting {
     }
 
     function addVoter(string memory id)
-    public onlyOwner
+    public onlyOwner running
     {
         Vote memory userVote = Vote(true, "");
         votes[id] = userVote;
         voters.push(id);
     }
 
-    function getNow() 
-    public view
-    returns (uint)
-    {
-        return now;
-    }
-
     function getNumberOfVoters()
-    public view
+    public view running
     returns (uint)
     {
         return voters.length;
     }
 
     function getTimeLeft()
-    public view
+    public view running
     returns (int)
     {
-        return int(endingTime) - int(now);
+        //return int(endingTime) - int(now);
+        return 1;
     }
 
     function isAbleToVote(string memory id)
-    public view
+    public view running
     returns (bool)
     {
         return votes[id].eligibleToVote;
     }
 
-    function set(string memory x) 
-    public 
+    function getVote(uint index)
+    public view notRunning voteEnded
+    returns (string memory)
     {
-        if (compareStringsByBytes(x, myString)) {
-            trueKey = "true";
-            myString = "true";
-        } else {
-            trueKey = "false";
-            myString = "false";
+        return votes[voters[index]].on;
+    }
+
+    function clearElection()
+    internal 
+    {
+        for (uint i = 0; i < voters.length; i++) {
+            votes[voters[i]] = Vote(false, "");
         }
+        delete voters;
     }
-
-    function compareStringsByBytes
-    (
-        string memory s1,
-        string memory s2
-    ) 
-    private pure 
-        returns(bool)
-    {
-        return keccak256(abi.encodePacked(s1)) == keccak256(abi.encodePacked(s2));
-    }
-
-
-
 }
