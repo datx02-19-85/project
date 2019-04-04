@@ -14,7 +14,7 @@ async function encryptVote(publicKey, party) {
   const string = EthCrypto.cipher.stringify(encryptedObject);
 
   // Compress string to hex
-  const compressed = EthCrypto.hex.compress(string, true);
+  const compressed = EthCrypto.hex.compress(string);
 
   return compressed;
 }
