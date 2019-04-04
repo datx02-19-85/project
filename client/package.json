@@ -11,8 +11,10 @@
     "react": "^16.8.5",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.8.5",
+    "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
     "react-split-flap-display": "^0.1.0",
+    "react-swipeable-routes": "^0.6.0",
     "reactstrap": "^7.1.0",
     "styled-components": "^4.2.0",
     "typescript": "^3.3.4000"

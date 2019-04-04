@@ -1,7 +1,6 @@
 import React from 'react';
 import { DrizzleContext } from 'drizzle-react';
-// import VotingApp from './VotingApp';
-import RenderID from './screens/RenderID';
+import VotingApp from './VotingApp';
 
 export default () => (
   <DrizzleContext.Consumer>
@@ -13,13 +12,7 @@ export default () => (
         return 'Loading...';
       }
 
-      return (
-        /*
-        <VotingApp
-          drizzle={drizzle}
-          drizzleState={drizzleState} /> */
-        <RenderID drizzle={drizzle} drizzleState={drizzleState} />
-      );
+      return <VotingApp drizzle={drizzle} drizzleState={drizzleState} />;
     }}
   </DrizzleContext.Consumer>
 );
