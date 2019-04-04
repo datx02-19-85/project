@@ -6,7 +6,7 @@ import EthCrypto from 'eth-crypto';
  */
 async function decryptVote(privateKey, encryptedVote) {
   // Decompress hex string
-  const decompressed = EthCrypto.hex.decompress(encryptedVote, true);
+  const decompressed = EthCrypto.hex.decompress(encryptedVote);
 
   // Trim hex string: remove 0x
   const trimmed = decompressed.substring(2, decompressed.length);
