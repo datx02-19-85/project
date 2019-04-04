@@ -8,6 +8,7 @@ A description will be added shortly...
 
 - [Vote](/documents/vote.md) - is our first contract to try out different possibilities.
 - [Voting](/documents/voting.md) - a first implementation of voting.
+- [PoliticalParties](/documents/PoliticalParties.md) - a holder for votable parties
 
 More to come...
 
