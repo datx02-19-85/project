@@ -1,12 +1,14 @@
 import React from 'react';
 import { Button } from 'reactstrap';
+import startElection from '../utils/StartElection';
 
 class Verifier extends React.Component {
   constructor() {
     super();
     this.state = {
       stackId: null,
-      count: null
+      count: null,
+      didStartElection: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -14,12 +16,20 @@ class Verifier extends React.Component {
     this.getTxStatus = this.getTxStatus.bind(this);
   }
 
+  async componentDidMount() {
+    const { drizzle, drizzleState } = this.props;
+    const { didStartElection } = this.state;
+    if (didStartElection) return;
+    await startElection(drizzle, drizzleState);
+    this.state.didStartElection = true;
+  }
+
   setValue = value => {
     const { drizzle, drizzleState } = this.props;
     const contract = drizzle.contracts.Voting;
 
     // let drizzle know we want to call the `set` method with `value`
-    const stackId = contract.methods.set.cacheSend(value, {
+    const stackId = contract.methods.isAbleToVote.cacheCall(value, {
       from: drizzleState.accounts[0]
     });
 
@@ -58,6 +68,14 @@ class Verifier extends React.Component {
   }
 
   render() {
+    const { drizzleState } = this.props;
+
+    const contract = drizzleState.contracts.Voting;
+    const { stackId } = this.state;
+    const value = contract.isAbleToVote[stackId];
+
+    if (value) console.log('value is ', value.value);
+
     const { count } = this.state;
     return (
       <div>
@@ -86,6 +104,7 @@ class Verifier extends React.Component {
         <div className="d-flex justify-content-center">
           {this.getTxStatus()}
         </div>
+        <div>Key status: {value != null ? value.value.toString() : ''}</div>
       </div>
     );
   }

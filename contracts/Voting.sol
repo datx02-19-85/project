@@ -60,10 +60,10 @@ contract Voting {
     )
     public onlyOwner notRunning
     {
-        clearElection();
+        //clearElection();
         maxNumberOfVoters = nVoters;
         publicKey = key;
-        endingTime = (now + upTime);
+        endingTime = 0;
         electionIsRunning = true;
     }
 
