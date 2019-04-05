@@ -1,17 +1,31 @@
 import React from 'react';
 import { Button } from 'reactstrap';
+import startElection from './StartElection';
 
 class Verifier extends React.Component {
   constructor() {
     super();
     this.state = {
       stackId: null,
-      count: null
+      count: null,
+      didStartElection: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.setValue = this.setValue.bind(this);
     this.getTxStatus = this.getTxStatus.bind(this);
+  }
+
+
+
+  async componentDidMount() {
+    const { drizzle, drizzleState } = this.props;
+    const { didStartElection } = this.state;
+    if (didStartElection) return;
+    const response = await startElection(drizzle, drizzleState);
+    console.log("response is: ", response);
+    this.state.didStartElection = true;
+
   }
 
   setValue = value => {
