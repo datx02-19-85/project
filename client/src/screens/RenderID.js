@@ -7,20 +7,20 @@ import Button from '../components/Button';
 class RenderID extends Component {
   constructor(props) {
     super(props);
-    const { drizzle } = this.props;
-    const contract = drizzle.contracts.Voting;
-
     this.state = {
       i: 'nothing',
       copy: true,
-      contract,
       copied: false
     };
   }
 
   async getNVoters() {
-    const { state } = this;
-    const n = await state.contract.getNumberOfVotes().call();
+    const {
+      drizzle: {
+        contracts: { Voting }
+      }
+    } = this.props;
+    const n = await Voting.methods.getNumberOfVotes().call();
     return n;
   }
 
@@ -40,8 +40,13 @@ class RenderID extends Component {
   };
 
   async addVoter(hash) {
-    const { state } = this;
-    await state.contract.addVoter(hash).call();
+    const {
+      drizzle: {
+        contracts: { Voting }
+      },
+      drizzleState: { accounts }
+    } = this.props;
+    await Voting.methods.addVoter(hash).send({ from: accounts[0] });
   }
 
   render() {
