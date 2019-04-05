@@ -1,22 +1,53 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Navbar, Nav, NavItem } from 'reactstrap';
+import { Nav, NavItem, NavLink } from 'reactstrap';
 
-const Header = () => {
-  return (
-    <div>
-      <Navbar color="dark">
-        <Nav>
+class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      gen: false,
+      ver: false
+    };
+  }
+
+  setGen = () => {
+    this.setState({
+      gen: true,
+      ver: false
+    });
+  };
+
+  setVer = () => {
+    this.setState({
+      gen: false,
+      ver: true
+    });
+  };
+
+  render() {
+    const { state, setGen, setVer } = this;
+    return (
+      <div>
+        <Nav tabs>
           <NavItem>
-            <Link to="/generate">Generate</Link>
+            <NavLink active={state.gen}>
+              <Link to="/generate" onClick={setGen}>
+                Generate
+              </Link>
+            </NavLink>
           </NavItem>
           <NavItem>
-            <Link to="/verifier">Verifier</Link>
+            <NavLink active={state.ver}>
+              <Link to="/verifier" onClick={setVer}>
+                Verifier
+              </Link>
+            </NavLink>
           </NavItem>
         </Nav>
-      </Navbar>
-    </div>
-  );
-};
+      </div>
+    );
+  }
+}
 
 export default Header;
