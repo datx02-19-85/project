@@ -31,8 +31,8 @@ class RenderID extends Component {
   };
 
   genHash = () => {
-    const { state, getNVoters } = this;
-    const hash = Hash(2 + 5381 * getNVoters() ** state.electioNr);
+    const { electioNr } = this.state;
+    const hash = Hash(2 + 5381 * this.getNVoters() ** electioNr);
     this.addVoter(hash);
     this.setState({
       i: hash,
@@ -62,13 +62,9 @@ class RenderID extends Component {
       },
       drizzleState: { accounts }
     } = this.props;
-    try {
-      console.log('Trying to add hash');
-      await Voting.methods.addVoter(hash).send({ from: accounts[0] });
-      console.log('did add');
-    } catch (error) {
-      console.log('this should not happen: ', error);
-    }
+    await Voting.methods
+      .addVoter(hash)
+      .send({ from: accounts[0], gas: 200000 });
   };
 
   render() {
