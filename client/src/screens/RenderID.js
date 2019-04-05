@@ -10,7 +10,9 @@ class RenderID extends Component {
     this.state = {
       i: 'nothing',
       copy: true,
-      copied: false
+      copied: false,
+      canGenerate: true,
+      electioNr: 0
     };
   }
 
@@ -25,7 +27,8 @@ class RenderID extends Component {
   }
 
   genHash = () => {
-    const hash = Hash(/* this.getNVoters() */ 123);
+    const { state, getNVoters } = this;
+    const hash = Hash(2 + 5381 * getNVoters() ** state.electioNr);
     this.addVoter(hash);
     this.setState({
       i: hash,
@@ -36,6 +39,14 @@ class RenderID extends Component {
   onCopy = () => {
     this.setState({
       copied: true
+    });
+  };
+
+  handleSubmit = event => {
+    const result = event.target.value;
+    this.setState({
+      electioNr: result,
+      canGenerate: result <= 0
     });
   };
 
@@ -50,26 +61,31 @@ class RenderID extends Component {
   }
 
   render() {
-    const { state, onCopy, genHash } = this;
+    const { state, onCopy, genHash, handleSubmit } = this;
 
     return (
-      <div
-        className="d-flex flex-column"
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-      >
+      <div className="d-flex flex-column">
         <h1>Generate Voting ID</h1>
         <div>
           <FlipFlap id={state.i} />
         </div>
         <div>
-          <Button name="Generate" color="danger" onClick={genHash} />
+          <Button
+            name="Generate"
+            color="danger"
+            disabled={state.canGenerate}
+            onClick={genHash}
+          />
           <CopyToClipboard onCopy={onCopy} text={state.i}>
             <Button name="Copy Hash" color="warning" disabled={state.copy} />
           </CopyToClipboard>
+        </div>
+        <div>
+          <input
+            placeholder="Election hall nr."
+            type="number"
+            onChange={handleSubmit}
+          />
         </div>
         <div>
           {state.copied ? <span style={{ color: 'red' }}>Copied</span> : null}

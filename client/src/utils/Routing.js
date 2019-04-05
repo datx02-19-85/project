@@ -5,6 +5,7 @@ import Header from '../components/Header';
 
 import RenderID from '../screens/RenderID';
 import Verifier from '../components/Verifier';
+import Election from '../screens/Election';
 
 export default class Routing extends React.Component {
   constructor(props) {
@@ -30,14 +31,31 @@ export default class Routing extends React.Component {
     );
   };
 
+  election = () => {
+    const { state } = this;
+    return (
+      <Election drizzle={state.drizzle} drizzleState={state.drizzleState} />
+    );
+  };
+
   render() {
-    const { generate, verifier } = this;
+    const { generate, verifier, election } = this;
     return (
       <Router>
         <div>
           <Header />
-          <Route path="/generate" component={generate} />
-          <Route path="/verifier" component={verifier} />
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%'
+            }}
+          >
+            <Route path="/generate" component={generate} />
+            <Route path="/verifier" component={verifier} />
+            <Route path="/election" component={election} />
+          </div>
         </div>
       </Router>
     );
