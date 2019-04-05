@@ -16,7 +16,7 @@ contract("Voting", accounts => {
   beforeEach(async () => {
     instance = await Voting.deployed();
     await instance.stopElection("some eky");
-    await instance.startElection("public key", 0, 30);
+    await instance.startElection("public key", 0, 3000);
   });
 
   it("Should add voter", async () => {
