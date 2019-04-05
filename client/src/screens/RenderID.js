@@ -16,15 +16,19 @@ class RenderID extends Component {
     };
   }
 
-  async getNVoters() {
+  getNVoters = async () => {
     const {
       drizzle: {
         contracts: { Voting }
-      }
+      },
+      drizzleState: { accounts }
     } = this.props;
-    const n = await Voting.methods.getNumberOfVotes().call();
+    const n = await Voting.methods
+      .getNumberOfVoters()
+      .call({ from: accounts[0] });
+    console.log('Voters thus far: ', n);
     return n;
-  }
+  };
 
   genHash = () => {
     const { state, getNVoters } = this;
@@ -50,15 +54,22 @@ class RenderID extends Component {
     });
   };
 
-  async addVoter(hash) {
+  addVoter = async hash => {
+    console.log('New hash is:', hash);
     const {
       drizzle: {
         contracts: { Voting }
       },
       drizzleState: { accounts }
     } = this.props;
-    await Voting.methods.addVoter(hash).send({ from: accounts[0] });
-  }
+    try {
+      console.log('Trying to add hash');
+      await Voting.methods.addVoter(hash).send({ from: accounts[0] });
+      console.log('did add');
+    } catch (error) {
+      console.log('this should not happen: ', error);
+    }
+  };
 
   render() {
     const { state, onCopy, genHash, handleSubmit } = this;

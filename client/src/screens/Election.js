@@ -1,27 +1,19 @@
 import React from 'react';
 import Button from '../components/Button';
+import StartElection from '../utils/StartElection';
 
 export default class Election extends React.Component {
-  /* constructor(props) {
-    super(props);
+  start = async () => {
     const { drizzle, drizzleState } = this.props;
-    this.state = {
-      drizzle: drizzle,
-      drizzleState: drizzleState
-    };
-  } */
-
-  startElection = () => {};
+    const didStartup = await StartElection(drizzle, drizzleState);
+    console.log(didStartup);
+  };
 
   render() {
-    const { /* state, */ startElection } = this;
+    const { start } = this;
     return (
       <div>
-        <Button
-          name="Start election!"
-          color="warning"
-          onClick={startElection}
-        />
+        <Button name="Start election!" color="warning" onClick={start} />
       </div>
     );
   }
