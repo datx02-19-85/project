@@ -34,6 +34,7 @@
     "lint:sol": "solium -d ./contracts",
     "lint:sol:fix": "solium -d ./contracts --fix",
     "test": "concurrently \"npm run ganache\" \"npm run migrate && truffle test\" --kill-others --success first",
+    "test:collectdata": "concurrently \"npm run ganache\" \"npm run migrate && truffle test test/DataCollectionContract.test.js\" --kill-others --success first",
     "test:g": "npm run migrate:g && truffle test --network graphical",
     "lint:react": "eslint client/src && pretty-quick",
     "test:react": "npm run --prefix client/ test:staged"

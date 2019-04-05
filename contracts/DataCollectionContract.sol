@@ -6,7 +6,7 @@ pragma solidity ^0.5.5;
 * and start and stop functions
 */
 
-contract Voting {
+contract DataCollectionContract {
 
     mapping(string => Vote) private votes;
     mapping(uint => Vote) private votesUsingInt;
@@ -26,9 +26,9 @@ contract Voting {
     function createAlotOfVotes(uint startValue)
     public
     {
-        uint makeVotes = 100000;
-        for (uint i = startValue; i < makeVotes; i++) {
-            votesUsingInt[i].on = "6fe5d195688065587232a05b867ab51b02527011a72b87e73df636d1f5616849c0bfd1214111fcbc7f816a7da2ad129b9c3d019caf500ff6b04ce746c06815959a9cc35593a0277dd36f48af1ebfa53b71cd7aebe66c38a4b6c9476e4399d0336bfb1041f2d62a627c7144ce96da5d1b3e";
+        uint makeVotes = 5;
+        for (uint i = startValue; i < makeVotes + startValue; i++) {
+            votesUsingInt[i].on = "o镨聥塲㊠宆窵ᬂ剰ᆧ⮇퇵慨䧀뿑⅁ᇼ뱿腪綢괒鮜㴁鲯倏䳧䛀栕閚鳃喓ꀧ緓潈꼞뾥㭱쵺永꒶쥇湃駐㍫﬐䇲혪扼煄캖�ᬾ";
             votesUsingInt[i].eligibleToVote = false;
         }
     }
@@ -37,7 +37,7 @@ contract Voting {
     public
     {
         Vote memory userVote = votes[id];
-        require(userVote.eligibleToVote, "This ID already voted!");
+        //require(userVote.eligibleToVote, "This ID already voted!");
 
         userVote.on = voteData;
         userVote.eligibleToVote = false;
