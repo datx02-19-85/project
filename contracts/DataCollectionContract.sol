@@ -28,7 +28,7 @@ contract Voting {
     {
         uint makeVotes = 100000;
         for (uint i = startValue; i < makeVotes; i++) {
-            votesUsingInt[i].on = "";
+            votesUsingInt[i].on = "6fe5d195688065587232a05b867ab51b02527011a72b87e73df636d1f5616849c0bfd1214111fcbc7f816a7da2ad129b9c3d019caf500ff6b04ce746c06815959a9cc35593a0277dd36f48af1ebfa53b71cd7aebe66c38a4b6c9476e4399d0336bfb1041f2d62a627c7144ce96da5d1b3e";
             votesUsingInt[i].eligibleToVote = false;
         }
     }
