@@ -30,9 +30,11 @@ class RenderID extends Component {
     return n;
   };
 
-  genHash = () => {
+  genHash = async () => {
     const { electioNr } = this.state;
-    const hash = Hash(2 + 5381 * this.getNVoters() ** electioNr);
+    const nVoters = await this.getNVoters();
+    const seed = { nr: electioNr, prime1: 5381, nVoters, prime2: 2 };
+    const hash = Hash(seed);
     this.addVoter(hash);
     this.setState({
       i: hash,
