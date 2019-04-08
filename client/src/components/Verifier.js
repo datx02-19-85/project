@@ -2,7 +2,6 @@ import React from 'react';
 import { Button } from 'reactstrap';
 import Form from 'react-bootstrap/Form';
 import EthCrypto from 'eth-crypto';
-import startElection from '../utils/StartElection';
 import getParties from '../utils/PartyCollector';
 import encryptVote from '../utils/EncryptVote';
 
@@ -12,7 +11,6 @@ class Verifier extends React.Component {
     this.state = {
       stackId: null,
       count: null,
-      didStartElection: false,
       parties: null,
       show: false,
       candidate: null,
@@ -28,12 +26,8 @@ class Verifier extends React.Component {
   }
 
   async componentDidMount() {
-    const { drizzle, drizzleState } = this.props;
-    const { didStartElection, parties, key } = this.state;
-    if (!didStartElection) {
-      await startElection(drizzle, drizzleState);
-      this.state.didStartElection = true;
-    }
+    const { drizzle } = this.props;
+    const { parties, key } = this.state;
     if (!parties) {
       const p = await getParties(drizzle);
       this.setState({
