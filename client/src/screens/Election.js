@@ -77,7 +77,18 @@ export default class Election extends React.Component {
             <Button name="Stop election!" color="danger" onClick={stop} />
           </div>
         ) : (
-          <Button name="Start election!" color="warning" onClick={start} />
+          <div
+            className="d-flex flex-column"
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%'
+            }}
+          >
+            <h1>No election is running</h1>
+            <Button name="Start election!" color="warning" onClick={start} />
+          </div>
         )}
       </div>
     );
