@@ -3,7 +3,7 @@ import { Button } from 'reactstrap';
 import Form from 'react-bootstrap/Form';
 import startElection from '../utils/StartElection';
 import getParties from '../utils/PartyCollector';
-// import encryptVote from '../utils/PartyCollector';
+import encryptVote from '../utils/EncryptVote';
 
 class Verifier extends React.Component {
   constructor() {
@@ -109,12 +109,12 @@ class Verifier extends React.Component {
   }
 
   async handleVote() {
-    // console.log('key', this.state.key);
-    // console.log('candidate', this.state.candidate);
     const { key } = this.state;
     const { candidate } = this.state;
-    const encryptedVote = await getParties(key, candidate);
+    const encryptedVote = await encryptVote(key, candidate);
     console.log('here is function:', encryptedVote.value);
+    console.log('key', key);
+    console.log('candidate', candidate);
   }
 
   render() {
@@ -125,7 +125,7 @@ class Verifier extends React.Component {
     const value = contract.isAbleToVote[stackId];
 
     const { count, parties } = this.state;
-    const {show} = this.state;
+    const { show } = this.state;
     // for (let i=0; i < 3; i += 1){
     //   options.push(<option> {parties[0] } </option>)
     // }

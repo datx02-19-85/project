@@ -5,6 +5,8 @@ import EthCrypto from 'eth-crypto';
  * @return String
  */
 async function encryptVote(publicKey, party) {
+  console.log(publicKey);
+  console.log(party);
   const encryptedObject = await EthCrypto.encryptWithPublicKey(
     publicKey,
     JSON.stringify(party)
