@@ -1,31 +1,42 @@
 import React from 'react';
 import ReactLoading from 'react-loading';
 import Button from '../components/Button';
-import StartElection from '../utils/StartElection';
 
 export default class Election extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isRunning: false
+      isRunning: false,
+      ownerKey: ''
     };
   }
 
   start = async () => {
-    const { drizzle, drizzleState } = this.props;
-    const didStartup = await StartElection(drizzle, drizzleState);
-    console.log('Did start election: ', didStartup);
-  };
-
-  stop = async () => {
+    const { ownerKey } = this.state;
     const {
       drizzle: {
         contracts: { Voting }
-      },
-      drizzleState: { accounts }
+      }
     } = this.props;
     try {
-      await Voting.methods.stopElection('').send({ from: accounts[0] });
+      await Voting.methods
+        .startElection('public key', 0, 500)
+        .send({ from: ownerKey });
+      console.log('Did start the election');
+    } catch (error) {
+      console.log("Couldn't start the election? -> ", error);
+    }
+  };
+
+  stop = async () => {
+    const { ownerKey } = this.state;
+    const {
+      drizzle: {
+        contracts: { Voting }
+      }
+    } = this.props;
+    try {
+      await Voting.methods.stopElection('').send({ from: ownerKey });
       console.log('Did stop the election');
     } catch (error) {
       console.log("Couldn't stop the election? -> ", error);
@@ -33,27 +44,39 @@ export default class Election extends React.Component {
   };
 
   checkIfRunning = async () => {
+    const { isRunning } = this.state;
     const {
       drizzle: {
         contracts: { Voting }
-      },
-      drizzleState: { accounts }
+      }
     } = this.props;
-    const isRunning = await Voting.methods
-      .electionIsRunning()
-      .call({ from: accounts[0] });
+    const isActuallyRunning = await Voting.methods.electionIsRunning().call();
+    if (isActuallyRunning !== isRunning) {
+      console.log('Election is running: ', isActuallyRunning);
+      this.setState({
+        isRunning: isActuallyRunning
+      });
+    }
+  };
+
+  handleKey = event => {
+    const result = event.target.value;
     this.setState({
-      isRunning
+      ownerKey: result
     });
-    console.log('Election is running: ', isRunning);
   };
 
   render() {
-    const { checkIfRunning, state, start, stop } = this;
+    const { checkIfRunning, state, start, stop, handleKey } = this;
     checkIfRunning();
-    console.log('Is running: ', state.isRunning);
     return (
-      <div>
+      <div
+        className="d-flex flex-column"
+        style={{
+          display: 'flex',
+          alignItems: 'center'
+        }}
+      >
         {state.isRunning ? (
           <div
             className="d-flex flex-column"
@@ -63,8 +86,13 @@ export default class Election extends React.Component {
             }}
           >
             <h1>Election in progress</h1>
-            <ReactLoading type="cubes" color="blue" width="20%" height="100%" />
-            <Button name="Stop election!" color="danger" onClick={stop} />
+            <ReactLoading type="cubes" color="blue" width="20%" />
+            <Button
+              name="Stop election!"
+              color="danger"
+              onClick={stop}
+              disabled={state.ownerKey === ''}
+            />
           </div>
         ) : (
           <div
@@ -75,9 +103,15 @@ export default class Election extends React.Component {
             }}
           >
             <h1>No election is running</h1>
-            <Button name="Start election!" color="warning" onClick={start} />
+            <Button
+              name="Start election!"
+              color="warning"
+              onClick={start}
+              disabled={state.ownerKey === ''}
+            />
           </div>
         )}
+        <input placeholder="Enter owner key" type="text" onChange={handleKey} />
       </div>
     );
   }

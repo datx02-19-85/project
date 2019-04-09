@@ -20,12 +20,9 @@ class RenderID extends Component {
     const {
       drizzle: {
         contracts: { Voting }
-      },
-      drizzleState: { accounts }
+      }
     } = this.props;
-    const n = await Voting.methods
-      .getNumberOfVoters()
-      .call({ from: accounts[0] });
+    const n = await Voting.methods.getNumberOfVoters().call();
     console.log('Voters thus far: ', n);
     return n;
   };
