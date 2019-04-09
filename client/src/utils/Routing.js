@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import SwipeableRoutes from 'react-swipeable-routes';
 import Header from '../components/Header';
-// import SwipeableRoutes from 'react-swipeable-routes';
 
 import RenderID from '../screens/RenderID';
 import Verifier from '../components/Verifier';
@@ -30,22 +30,28 @@ export default class Routing extends React.Component {
   render() {
     const { start, generate, verifier, election } = this;
     return (
-      <Router>
+      <Router
+        style={{
+          display: 'inline-block'
+        }}
+      >
         <div>
           <Header />
-          <div
+          <SwipeableRoutes
             style={{
-              display: 'flex',
+              position: 'fixed',
               justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%'
+              align: 'center',
+              left: '0',
+              right: '0',
+              top: '30%'
             }}
           >
             <Route path="/" component={start} />
             <Route path="/generate" component={generate} />
             <Route path="/verifier" component={verifier} />
             <Route path="/election" component={election} />
-          </div>
+          </SwipeableRoutes>
         </div>
       </Router>
     );

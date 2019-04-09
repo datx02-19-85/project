@@ -67,13 +67,11 @@ export default class Election extends React.Component {
             className="d-flex flex-column"
             style={{
               display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%'
+              alignItems: 'center'
             }}
           >
             <h1>Election in progress</h1>
-            <ReactLoading type="cubes" color="blue" width="100%" height="40%" />
+            <ReactLoading type="cubes" color="blue" width="100%" height="60%" />
             <Button name="Stop election!" color="danger" onClick={stop} />
           </div>
         ) : (
@@ -81,9 +79,7 @@ export default class Election extends React.Component {
             className="d-flex flex-column"
             style={{
               display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%'
+              alignItems: 'center'
             }}
           >
             <h1>No election is running</h1>

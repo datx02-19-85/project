@@ -73,7 +73,13 @@ class RenderID extends Component {
     const { state, onCopy, genHash, handleSubmit } = this;
 
     return (
-      <div className="d-flex flex-column">
+      <div
+        className="d-flex flex-column"
+        style={{
+          display: 'flex',
+          alignItems: 'center'
+        }}
+      >
         <h1>Generate Voting ID</h1>
         <div>
           <FlipFlap id={state.i} />
