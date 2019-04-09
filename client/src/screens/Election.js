@@ -86,7 +86,12 @@ export default class Election extends React.Component {
             }}
           >
             <h1>Election in progress</h1>
-            <ReactLoading type="cubes" color="blue" width="20%" />
+            <ReactLoading
+              type="cubes"
+              color="blue"
+              width="100%"
+              height="100%"
+            />
             <Button
               name="Stop election!"
               color="danger"
