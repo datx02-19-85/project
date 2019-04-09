@@ -30,11 +30,7 @@ export default class Routing extends React.Component {
   render() {
     const { start, generate, verifier, election } = this;
     return (
-      <Router
-        style={{
-          display: 'inline-block'
-        }}
-      >
+      <Router>
         <div>
           <Header />
           <SwipeableRoutes

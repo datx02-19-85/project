@@ -53,15 +53,7 @@ export default class Election extends React.Component {
     checkIfRunning();
     console.log('Is running: ', state.isRunning);
     return (
-      <div
-        className="d-flex flex-column"
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100%'
-        }}
-      >
+      <div>
         {state.isRunning ? (
           <div
             className="d-flex flex-column"
@@ -71,7 +63,7 @@ export default class Election extends React.Component {
             }}
           >
             <h1>Election in progress</h1>
-            <ReactLoading type="cubes" color="blue" width="100%" height="60%" />
+            <ReactLoading type="cubes" color="blue" width="20%" height="100%" />
             <Button name="Stop election!" color="danger" onClick={stop} />
           </div>
         ) : (

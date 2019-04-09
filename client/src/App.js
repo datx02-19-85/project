@@ -9,7 +9,6 @@ export default () => (
       const { drizzle, drizzleState, initialized } = drizzleContext;
 
       if (!initialized) {
-        // TODO: Show a nice screen. Maybe even catch why this is showing.
         return (
           <div
             className="d-flex flex-column"
