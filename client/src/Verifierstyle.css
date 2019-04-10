@@ -1,0 +1,34 @@
+body {
+  background-color: #fff;
+  color: #454757;
+  font-family: 'Hind Guntur', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.voteInput {
+  width: 300px;
+}
+
+.Vote-button {
+  align-items: center;
+  display: flex;
+  margin: auto;
+  text-align: right;
+  transition: height 500ms 0ms, opacity 500ms 500ms;
+}
+
+.idBox {
+  position: absolute;
+  bottom: 80%;
+}
+
+.boxx {
+  position: absolute;
+  bottom: 30%;
+}
+
+.statusBox {
+  position: absolute;
+  bottom: 70%;
+  right: 41.5%;
+}

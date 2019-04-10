@@ -1,47 +1,53 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-// import SwipeableRoutes from 'react-swipeable-routes';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import SwipeableRoutes from 'react-swipeable-routes';
+import Header from '../components/Header';
 
 import RenderID from '../screens/RenderID';
 import Verifier from '../components/Verifier';
+import Election from '../screens/Election';
 
 export default class Routing extends React.Component {
-  constructor(props) {
-    super(props);
-    const { drizzle, drizzleState } = this.props;
-    this.state = {
-      drizzle,
-      drizzleState
-    };
-  }
+  start = () => {
+    return <div />;
+  };
 
   generate = () => {
-    const { state } = this;
-    return (
-      <RenderID drizzle={state.drizzle} drizzleState={state.drizzleState} />
-    );
+    const { drizzle, drizzleState } = this.props;
+    return <RenderID drizzle={drizzle} drizzleState={drizzleState} />;
   };
 
   verifier = () => {
-    const { state } = this;
-    return (
-      <Verifier drizzle={state.drizzle} drizzleState={state.drizzleState} />
-    );
+    const { drizzle, drizzleState } = this.props;
+    return <Verifier drizzle={drizzle} drizzleState={drizzleState} />;
+  };
+
+  election = () => {
+    const { drizzle, drizzleState } = this.props;
+    return <Election drizzle={drizzle} drizzleState={drizzleState} />;
   };
 
   render() {
-    const { generate, verifier } = this;
+    const { start, generate, verifier, election } = this;
     return (
       <Router>
         <div>
-          <ul>
-            <li>
-              <Link to="/generate">Generate</Link>
-              <Link to="/verifier">Verifier</Link>
-            </li>
-          </ul>
-          <Route path="/generate" component={generate} />
-          <Route path="/verifier" component={verifier} />
+          <Header />
+          <SwipeableRoutes
+            style={{
+              position: 'fixed',
+              justifyContent: 'center',
+              align: 'center',
+              left: '0',
+              right: '0',
+              top: '30%'
+            }}
+          >
+            <Route path="/" component={start} />
+            <Route path="/generate" component={generate} />
+            <Route path="/verifier" component={verifier} />
+            <Route path="/election" component={election} />
+          </SwipeableRoutes>
         </div>
       </Router>
     );

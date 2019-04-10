@@ -7,25 +7,31 @@ import Button from '../components/Button';
 class RenderID extends Component {
   constructor(props) {
     super(props);
-    const { drizzle } = this.props;
-    const contract = drizzle.contracts.Voting;
-
     this.state = {
       i: 'nothing',
       copy: true,
-      contract,
-      copied: false
+      copied: false,
+      canGenerate: true,
+      electioNr: 0
     };
   }
 
-  async getNVoters() {
-    const { state } = this;
-    const n = await state.contract.getNumberOfVotes().call();
+  getNVoters = async () => {
+    const {
+      drizzle: {
+        contracts: { Voting }
+      }
+    } = this.props;
+    const n = await Voting.methods.getNumberOfVoters().call();
+    console.log('Voters thus far: ', n);
     return n;
-  }
+  };
 
-  genHash = () => {
-    const hash = Hash(/* this.getNVoters() */ 123);
+  genHash = async () => {
+    const { electioNr } = this.state;
+    const nVoters = await this.getNVoters();
+    const seed = { nr: electioNr, prime1: 5381, nVoters, prime2: 2 };
+    const hash = Hash(seed);
     this.addVoter(hash);
     this.setState({
       i: hash,
@@ -39,20 +45,35 @@ class RenderID extends Component {
     });
   };
 
-  async addVoter(hash) {
-    const { state } = this;
-    await state.contract.addVoter(hash).call();
-  }
+  handleSubmit = event => {
+    const result = event.target.value;
+    this.setState({
+      electioNr: result,
+      canGenerate: result <= 0
+    });
+  };
+
+  addVoter = async hash => {
+    console.log('New hash is:', hash);
+    const {
+      drizzle: {
+        contracts: { Voting }
+      },
+      drizzleState: { accounts }
+    } = this.props;
+    await Voting.methods
+      .addVoter(hash)
+      .send({ from: accounts[0], gas: 200000 });
+  };
 
   render() {
-    const { state, onCopy, genHash } = this;
+    const { state, onCopy, genHash, handleSubmit } = this;
 
     return (
       <div
         className="d-flex flex-column"
         style={{
           display: 'flex',
-          justifyContent: 'center',
           alignItems: 'center'
         }}
       >
@@ -61,10 +82,22 @@ class RenderID extends Component {
           <FlipFlap id={state.i} />
         </div>
         <div>
-          <Button name="Generate" color="danger" onClick={genHash} />
+          <Button
+            name="Generate"
+            color="danger"
+            disabled={state.canGenerate}
+            onClick={genHash}
+          />
           <CopyToClipboard onCopy={onCopy} text={state.i}>
             <Button name="Copy Hash" color="warning" disabled={state.copy} />
           </CopyToClipboard>
+        </div>
+        <div>
+          <input
+            placeholder="Election hall nr."
+            type="number"
+            onChange={handleSubmit}
+          />
         </div>
         <div>
           {state.copied ? <span style={{ color: 'red' }}>Copied</span> : null}
