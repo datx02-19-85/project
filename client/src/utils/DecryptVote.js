@@ -6,17 +6,17 @@ import EthCrypto from 'eth-crypto';
  */
 async function decryptVote(privateKey, encryptedVote) {
   // Decompress hex string
-  const decompressed = EthCrypto.hex.decompress(encryptedVote);
+  // const decompressed = EthCrypto.hex.decompress(encryptedVote);
 
   // Trim hex string: remove 0x
-  const trimmed = decompressed.substring(2, decompressed.length);
+  // const trimmed = decompressed.substring(2, decompressed.length);
 
   // Parse the string into an object again
-  const encryptedObject = EthCrypto.cipher.parse(trimmed);
+  // const encryptedObject = EthCrypto.cipher.parse(trimmed);
 
   const decryptedVote = await EthCrypto.decryptWithPrivateKey(
     privateKey,
-    encryptedObject
+    encryptedVote
   );
 
   return JSON.parse(decryptedVote);
