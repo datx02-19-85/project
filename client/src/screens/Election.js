@@ -18,7 +18,6 @@ export default class Election extends React.Component {
     this.setState({
       privateKey
     });
-    localStorage.setItem('privateKey', privateKey);
     const {
       props: {
         drizzle: {

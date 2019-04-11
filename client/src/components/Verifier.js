@@ -94,11 +94,11 @@ class Verifier extends React.Component {
       stateUpdate.transactions[txHash].status}`;
   };
 
-  handleSend = count => {
+  handleSend = (count, encryptedVote) => {
     const { drizzle, drizzleState } = this.props;
     const contract = drizzle.contracts.Voting;
 
-    const voteConfirm = contract.methods.vote.cacheSend(count, 'key', {
+    const voteConfirm = contract.methods.vote.cacheSend(count, encryptedVote, {
       from: drizzleState.accounts[0]
     });
 

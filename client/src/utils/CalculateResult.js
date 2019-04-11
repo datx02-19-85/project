@@ -6,7 +6,7 @@ export default async function calculateResult(drizzle) {
   const amountMap = new Map();
   const total = votes.length;
 
-  const privateKey = localStorage.getItem('privateKey');
+  const privateKey = drizzle.contracts.Voting.methods.privateKey().call();
 
   const result = votes.map(function(vote) {
     return decryptVote(privateKey, vote);

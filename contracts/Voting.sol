@@ -4,7 +4,7 @@ contract Voting {
     address private owner;
     
     string public publicKey;
-    string private privateKey; 
+    string public privateKey; 
 
     uint public endingTime; // not used at this point
 
@@ -98,7 +98,7 @@ contract Voting {
     }
 
     function getNumberOfVoters()
-    public view running
+    public view
     returns (uint)
     {
         return voters.length;
