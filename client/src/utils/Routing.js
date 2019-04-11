@@ -3,13 +3,15 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import SwipeableRoutes from 'react-swipeable-routes';
 import Header from '../components/Header';
 
+import Start from '../screens/Start';
 import RenderID from '../screens/RenderID';
 import Verifier from '../components/Verifier';
 import Election from '../screens/Election';
 
 export default class Routing extends React.Component {
   start = () => {
-    return <div />;
+    const { drizzle, drizzleState } = this.props;
+    return <Start drizzle={drizzle} drizzleState={drizzleState} />;
   };
 
   generate = () => {

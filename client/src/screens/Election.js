@@ -1,18 +1,23 @@
 import React from 'react';
 import ReactLoading from 'react-loading';
+import EthCrypto from 'eth-crypto';
 import Button from '../components/Button';
 
 export default class Election extends React.Component {
   constructor(props) {
     super(props);
+    const { publicKey, privateKey } = EthCrypto.createIdentity();
     this.state = {
       isRunning: false,
-      ownerKey: ''
+      ownerKey: '',
+      publicKey,
+      privateKey
     };
+    localStorage.setItem('privateKey', privateKey);
   }
 
   start = async () => {
-    const { ownerKey } = this.state;
+    const { ownerKey, publicKey } = this.state;
     const {
       drizzle: {
         contracts: { Voting }
@@ -20,8 +25,8 @@ export default class Election extends React.Component {
     } = this.props;
     try {
       await Voting.methods
-        .startElection('public key', 0, 500)
-        .send({ from: ownerKey });
+        .startElection(EthCrypto.publicKey.compress(publicKey), 0, 500)
+        .send({ from: ownerKey, gas: 200000 });
       console.log('Did start the election');
     } catch (error) {
       console.log("Couldn't start the election? -> ", error);
@@ -29,14 +34,16 @@ export default class Election extends React.Component {
   };
 
   stop = async () => {
-    const { ownerKey } = this.state;
+    const { ownerKey, privateKey } = this.state;
     const {
       drizzle: {
         contracts: { Voting }
       }
     } = this.props;
     try {
-      await Voting.methods.stopElection('').send({ from: ownerKey });
+      await Voting.methods
+        .stopElection(privateKey)
+        .send({ from: ownerKey, gas: 200000 });
       console.log('Did stop the election');
     } catch (error) {
       console.log("Couldn't stop the election? -> ", error);
@@ -116,7 +123,11 @@ export default class Election extends React.Component {
             />
           </div>
         )}
-        <input placeholder="Enter owner key" type="text" onChange={handleKey} />
+        <input
+          placeholder="Enter owner key, for inconveniance"
+          type="text"
+          onChange={handleKey}
+        />
       </div>
     );
   }
