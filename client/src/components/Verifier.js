@@ -11,14 +11,11 @@ class Verifier extends React.Component {
   constructor() {
     super();
     this.state = {
-      stackId: null,
       count: null,
       parties: null,
-      show: false,
       candidate: null,
       key: null,
       voteConfirm: null,
-      value: false,
       able: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -51,7 +48,7 @@ class Verifier extends React.Component {
   }
 
   setValue = async value => {
-    const { drizzle, drizzleState } = this.props;
+    const { drizzle } = this.props;
     const contract = drizzle.contracts.Voting;
 
     // let drizzle know we want to call the `set` method with `value`
@@ -60,13 +57,6 @@ class Verifier extends React.Component {
     console.log('well isit?', isit);
 
     this.setState({ able: isit });
-
-    const stackId = contract.methods.isAbleToVote.cacheCall(value, {
-      from: drizzleState.accounts[0]
-    });
-
-    // save the `stackId` for later reference
-    this.setState({ stackId });
   };
 
   getKey = async () => {
@@ -80,9 +70,10 @@ class Verifier extends React.Component {
 
   getTxStatus = () => {
     // get the transaction states from the drizzle state
-    const { drizzle: store } = this.props;
 
-    const stateUpdate = this.props.drizzle.store.getState();
+    const { drizzle: props } = this.props;
+    const stateUpdate = props.store.getState();
+    // const stateUpdate = this.props.drizzle.store.getState();
     const { voteConfirm } = this.state;
     console.log('vote configmr is, ', voteConfirm);
     if (voteConfirm == null) return null;
@@ -93,18 +84,21 @@ class Verifier extends React.Component {
 
     // if transaction hash does not exist, don't display anything
     if (!txHash) return null;
-    console.log(stateUpdate.transactions);
+    console.log(
+      `Transaction status: ${stateUpdate.transactions[txHash] &&
+        stateUpdate.transactions[txHash].status}`
+    );
 
     // otherwise, return the transaction status
     return `Transaction status: ${stateUpdate.transactions[txHash] &&
       stateUpdate.transactions[txHash].status}`;
   };
 
-  handleSend = (count, encryptedVote) => {
+  handleSend = count => {
     const { drizzle, drizzleState } = this.props;
     const contract = drizzle.contracts.Voting;
 
-    const voteConfirm = contract.methods.vote.cacheSend(count, encryptedVote, {
+    const voteConfirm = contract.methods.vote.cacheSend(count, 'key', {
       from: drizzleState.accounts[0]
     });
 
@@ -139,7 +133,7 @@ class Verifier extends React.Component {
     const { count } = this.state;
     console.log('testting count:', count);
     await this.setValue(count);
-    this.handleTrue();
+    // this.handleTrue();
     // window.alert('You are now verified. Please cast your vote.'));
   }
 
@@ -151,7 +145,7 @@ class Verifier extends React.Component {
     // console.log(this.state.candidate);
   }
 
-  handleTrue() {
+  /* handleTrue() {
     const { drizzleState } = this.props;
     const contract = drizzleState.contracts.Voting;
     const { stackId } = this.state;
@@ -162,10 +156,12 @@ class Verifier extends React.Component {
     console.log(`here is able shit ${  able}`);
 
     if (this.state.able) this.setState({ show: true });
-  }
+  } */
 
   render() {
     const { parties } = this.state;
+    const { count } = this.state;
+    const { able } = this.state;
 
     // for (let i=0; i < 3; i += 1){
     //   options.push(<option> {parties[0] } </option>)
@@ -182,7 +178,7 @@ class Verifier extends React.Component {
 
     return (
       <div>
-        {console.log('COUNTTT', this.state.count)}
+        {console.log('COUNTTT', count)}
         <div className=" d-flex justify-content-center">
           <div className="idBox">
             <div className="d-flex justify-content-center">Your key: </div>
@@ -206,7 +202,7 @@ class Verifier extends React.Component {
             </div>
           </div>
           {/* <div className ="animated fadeInLeft ">Key status: {value != null ? value.value.toString() : ''}</div> */}
-          {this.state.show ? (
+          {able ? (
             <div className="boxx">
               <div className=" animated fadeInDown  ">
                 <Form>
@@ -234,9 +230,7 @@ class Verifier extends React.Component {
             </div>
           ) : null}
         </div>
-        <div className="statusBox d-flex justify-content-center">
-          {this.getTxStatus()}
-        </div>
+        <div>{this.getTxStatus()}</div>
       </div>
     );
   }
