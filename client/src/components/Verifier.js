@@ -4,25 +4,28 @@ import Form from 'react-bootstrap/Form';
 import EthCrypto from 'eth-crypto';
 import getParties from '../utils/PartyCollector';
 import encryptVote from '../utils/EncryptVote';
+import '../Verifierstyle.css';
+import '../animate.css';
 
 class Verifier extends React.Component {
   constructor() {
     super();
     this.state = {
-      stackId: null,
       count: null,
       parties: null,
-      show: false,
       candidate: null,
-      key: null
+      key: null,
+      voteConfirm: null,
+      able: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.handleVerify = this.handleVerify.bind(this);
     this.setValue = this.setValue.bind(this);
     this.getTxStatus = this.getTxStatus.bind(this);
     this.handleForm = this.handleForm.bind(this);
     this.getKey = this.getKey.bind(this);
     this.handleVote = this.handleVote.bind(this);
+    this.handleSend = this.handleSend.bind(this);
   }
 
   async componentDidMount() {
@@ -37,23 +40,23 @@ class Verifier extends React.Component {
     if (!key) {
       /* const publicKey = await drizzle.contracts.Voting.methods
         .publicKey()
-        .call(); */
+        .call();
+      console.log("here is the keeeey:", publicKey) */
       const { publicKey } = EthCrypto.createIdentity();
       this.setState({ key: publicKey });
     }
   }
 
-  setValue = value => {
-    const { drizzle, drizzleState } = this.props;
+  setValue = async value => {
+    const { drizzle } = this.props;
     const contract = drizzle.contracts.Voting;
 
     // let drizzle know we want to call the `set` method with `value`
-    const stackId = contract.methods.isAbleToVote.cacheCall(value, {
-      from: drizzleState.accounts[0]
-    });
 
-    // save the `stackId` for later reference
-    this.setState({ stackId });
+    const isit = await contract.methods.isAbleToVote(value).call();
+    console.log('well isit?', isit);
+
+    this.setState({ able: isit });
   };
 
   getKey = async () => {
@@ -67,21 +70,72 @@ class Verifier extends React.Component {
 
   getTxStatus = () => {
     // get the transaction states from the drizzle state
-    const {
-      drizzleState: { transactions, transactionStack }
-    } = this.props;
 
+    const { drizzle: props } = this.props;
+    const stateUpdate = props.store.getState();
+    // const stateUpdate = this.props.drizzle.store.getState();
+    const { voteConfirm } = this.state;
+    console.log('vote configmr is, ', voteConfirm);
+    if (voteConfirm == null) return null;
     // get the transaction hash using our saved `stackId`
-    const { stackId: id } = this.state;
-    const txHash = transactionStack[id];
+    const txHash = stateUpdate.transactionStack[voteConfirm];
+
+    console.log('tsxhash is: ', txHash);
 
     // if transaction hash does not exist, don't display anything
     if (!txHash) return null;
+    console.log(
+      `Transaction status: ${stateUpdate.transactions[txHash] &&
+        stateUpdate.transactions[txHash].status}`
+    );
 
     // otherwise, return the transaction status
-    return `Transaction status: ${transactions[txHash] &&
-      transactions[txHash].status}`;
+    return `Transaction status: ${stateUpdate.transactions[txHash] &&
+      stateUpdate.transactions[txHash].status}`;
   };
+
+  handleSend = count => {
+    const { drizzle, drizzleState } = this.props;
+    const contract = drizzle.contracts.Voting;
+
+    const voteConfirm = contract.methods.vote.cacheSend(count, 'key', {
+      from: drizzleState.accounts[0]
+    });
+
+    this.setState({ voteConfirm });
+    console.log(`voteconfirm is:${voteConfirm}`);
+  };
+
+  async handleVote() {
+    const { count } = this.state;
+    const { key } = this.state;
+    const { candidate } = this.state;
+    const encryptedVote = await encryptVote(key, candidate);
+    const r = window.confirm(`You are now voting for ${candidate}`);
+    if (r === true) {
+      this.handleSend(count, encryptedVote);
+
+      console.log('here is function:', encryptedVote);
+      console.log('key', key);
+      console.log('candidate', candidate);
+
+      console.log(`txstatus:${this.getTxStatus()}`);
+    }
+  }
+
+  handleSubmit(event) {
+    this.setState({
+      count: event.target.value
+    });
+  }
+
+  async handleVerify() {
+    const { count } = this.state;
+    console.log('testting count:', count);
+    await this.setValue(count);
+    // this.handleTrue();
+    // window.alert('You are now verified. Please cast your vote.'));
+  }
 
   handleForm(event) {
     // this.setState({
@@ -91,37 +145,24 @@ class Verifier extends React.Component {
     // console.log(this.state.candidate);
   }
 
-  handleChange() {
-    const { count } = this.state;
-    console.log(count);
-    this.setValue(count);
-    this.setState({ show: true });
-  }
-
-  handleSubmit(event) {
-    this.setState({
-      count: event.target.value
-    });
-  }
-
-  async handleVote() {
-    const { key } = this.state;
-    const { candidate } = this.state;
-    const encryptedVote = await encryptVote(key, candidate);
-    console.log('here is function:', encryptedVote.value);
-    console.log('key', key);
-    console.log('candidate', candidate);
-  }
-
-  render() {
+  /* handleTrue() {
     const { drizzleState } = this.props;
-
     const contract = drizzleState.contracts.Voting;
     const { stackId } = this.state;
-    const value = contract.isAbleToVote[stackId];
+    const able = contract.isAbleToVote[stackId];
 
-    const { count, parties } = this.state;
-    const { show } = this.state;
+    this.setState({ able });
+    console.log(`test show ${  this.state.show}`);
+    console.log(`here is able shit ${  able}`);
+
+    if (this.state.able) this.setState({ show: true });
+  } */
+
+  render() {
+    const { parties } = this.state;
+    const { count } = this.state;
+    const { able } = this.state;
+
     // for (let i=0; i < 3; i += 1){
     //   options.push(<option> {parties[0] } </option>)
     // }
@@ -133,61 +174,63 @@ class Verifier extends React.Component {
       options.push(<option key={i}> {parties[i]} </option>); //
     }
 
-    if (value) console.log('value is ', value.value);
+    // if (value) console.log('value is ', value.value);
 
     return (
       <div>
-        <div className="d-flex justify-content-center">Your key: </div>
-        <div className="d-flex justify-content-center">
-          <input
-            type="text"
-            className="voteInput"
-            onChange={this.handleSubmit}
-          />
-        </div>
-        <div className="d-flex justify-content-center">
-          <Button
-            color="primary"
-            onClick={this.handleChange}
-            className="button"
-            type="submit"
-          >
-            {' '}
-            Verify{' '}
-          </Button>
-        </div>
-        <div className="d-flex justify-content-center">
-          <h1 className="key">{count}</h1>
-        </div>
-        <div className="d-flex justify-content-center">
-          {this.getTxStatus()}
-        </div>
-        <div>Key status: {value != null ? value.value.toString() : ''}</div>
-        {show && (
-          <div className="d-flex justify-content-center">
-            <Form>
-              <Form.Group controlId="exampleForm.ControlSelect2">
-                <Form.Control
-                  onChange={this.handleForm}
-                  componentClass="textarea"
-                  style={{ height: 100, width: 1000 }}
-                  as="select"
-                  multiple
-                >
-                  {options}
-                </Form.Control>
-              </Form.Group>
-            </Form>
-            <Button
-              color="primary"
-              className="button"
-              type="submit"
-              onClick={this.handleVote}
-            >
-              Vote
-            </Button>
+        {console.log('COUNTTT', count)}
+        <div className=" d-flex justify-content-center">
+          <div className="idBox">
+            <div className="d-flex justify-content-center">Your key: </div>
+            <div className="d-flex justify-content-center">
+              <input
+                type="text"
+                className="voteInput"
+                onChange={this.handleSubmit}
+              />
+            </div>
+            <div className="d-flex justify-content-center">
+              <Button
+                color="primary"
+                onClick={this.handleVerify}
+                className="button"
+                type="submit"
+              >
+                {' '}
+                Verify{' '}
+              </Button>
+            </div>
           </div>
-        )}
+          {/* <div className ="animated fadeInLeft ">Key status: {value != null ? value.value.toString() : ''}</div> */}
+          {able ? (
+            <div className="boxx">
+              <div className=" animated fadeInDown  ">
+                <Form>
+                  <Form.Group controlId="exampleForm.ControlSelect">
+                    <Form.Control
+                      onChange={this.handleForm}
+                      componentClass="textarea"
+                      style={{ height: 100, width: 500 }}
+                      as="select"
+                      multiple
+                    >
+                      {options}
+                    </Form.Control>
+                  </Form.Group>
+                </Form>
+                <Button
+                  color="primary"
+                  className="Vote-button "
+                  type="submit"
+                  onClick={this.handleVote}
+                >
+                  Submit vote
+                </Button>
+              </div>
+            </div>
+          ) : null}
+        </div>
+        <div>{this.getTxStatus()}</div>
       </div>
     );
   }
