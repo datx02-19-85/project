@@ -28,7 +28,7 @@ export default class Election extends React.Component {
     } = this;
     try {
       await Voting.methods
-        .startElection(EthCrypto.publicKey.compress(publicKey), 0, 500)
+        .startElection(publicKey, 0, 500)
         .send({ from: ownerKey, gas: 200000 });
       console.log('Did start the election');
     } catch (error) {

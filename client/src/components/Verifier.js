@@ -99,7 +99,8 @@ class Verifier extends React.Component {
     const contract = drizzle.contracts.Voting;
 
     const voteConfirm = contract.methods.vote.cacheSend(count, encryptedVote, {
-      from: drizzleState.accounts[0]
+      from: drizzleState.accounts[0],
+      gas: 250000
     });
 
     this.setState({ voteConfirm });
@@ -110,7 +111,8 @@ class Verifier extends React.Component {
     const { count } = this.state;
     const { key } = this.state;
     const { candidate } = this.state;
-    const encryptedVote = await encryptVote(key, candidate);
+    // const encryptedVote = await encryptVote(key, candidate);
+    const encryptedVote = candidate;
     const r = window.confirm(`You are now voting for ${candidate}`);
     if (r === true) {
       this.handleSend(count, encryptedVote);

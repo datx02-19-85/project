@@ -6,10 +6,14 @@ export default async function calculateResult(drizzle) {
   const amountMap = new Map();
   const total = votes.length;
 
-  const privateKey = drizzle.contracts.Voting.methods.privateKey().call();
+  const privateKey = await drizzle.contracts.Voting.methods.privateKey().call();
+  console.log('Key is: ', privateKey);
 
   const result = votes.map(function(vote) {
-    return decryptVote(privateKey, vote);
+    console.log('Private key in map is: ', privateKey);
+    console.log('Vote in map is: ', vote);
+    return vote;
+    // return decryptVote(privateKey, vote);
   });
 
   for (let i = 0; i < total; i += 1) {
