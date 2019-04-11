@@ -6,23 +6,27 @@ import Button from '../components/Button';
 export default class Election extends React.Component {
   constructor(props) {
     super(props);
-    const { publicKey, privateKey } = EthCrypto.createIdentity();
     this.state = {
       isRunning: false,
       ownerKey: '',
-      publicKey,
-      privateKey
+      privateKey: ''
     };
-    localStorage.setItem('privateKey', privateKey);
   }
 
   start = async () => {
-    const { ownerKey, publicKey } = this.state;
+    const { publicKey, privateKey } = EthCrypto.createIdentity();
+    this.setState({
+      privateKey
+    });
+    localStorage.setItem('privateKey', privateKey);
     const {
-      drizzle: {
-        contracts: { Voting }
-      }
-    } = this.props;
+      props: {
+        drizzle: {
+          contracts: { Voting }
+        }
+      },
+      state: { ownerKey }
+    } = this;
     try {
       await Voting.methods
         .startElection(EthCrypto.publicKey.compress(publicKey), 0, 500)

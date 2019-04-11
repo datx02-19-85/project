@@ -2,7 +2,7 @@ export default async function getVotes(drizzle) {
   if (drizzle == null) return [];
 
   const contract = drizzle.contracts.Voting;
-  const nVotes = await contract.methods.getNumberOfVotes().call();
+  const nVotes = await contract.methods.getNumberOfVoters().call();
 
   const promises = [];
   for (let i = 0; i < nVotes; i += 1) {

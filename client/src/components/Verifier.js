@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 import Form from 'react-bootstrap/Form';
-import EthCrypto from 'eth-crypto';
+// import EthCrypto from 'eth-crypto';
 import getParties from '../utils/PartyCollector';
 import encryptVote from '../utils/EncryptVote';
 import '../Verifierstyle.css';
@@ -38,11 +38,11 @@ class Verifier extends React.Component {
       });
     }
     if (!key) {
-      /* const publicKey = await drizzle.contracts.Voting.methods
+      const publicKey = await drizzle.contracts.Voting.methods
         .publicKey()
         .call();
-      console.log("here is the keeeey:", publicKey) */
-      const { publicKey } = EthCrypto.createIdentity();
+      console.log('here is the keeeey:', publicKey);
+      // const { publicKey } = EthCrypto.createIdentity();
       this.setState({ key: publicKey });
     }
   }
