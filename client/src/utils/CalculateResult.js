@@ -16,14 +16,13 @@ export default async function calculateResult(drizzle) {
     const vote = result[i];
     let amount = 1;
     if (amountMap.has(vote)) {
-      amount = amountMap.get() + 1;
+      amount = amountMap.get(vote) + 1;
     }
     amountMap.set(vote, amount);
   }
 
-  amountMap.keys().array.forEach(party => {
-    const amount = amountMap.get(party);
-    const procentage = amount / total;
+  amountMap.forEach((amount, party) => {
+    const procentage = (amount / total) * 100;
     amountMap.set(party, procentage);
   });
 

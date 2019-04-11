@@ -17,8 +17,8 @@ class Start extends React.Component {
     const resultMap = await calculateResult(drizzle);
     const result = [['Party', 'Procentage']];
     let i = 1;
-    resultMap.keys().array.forEach(party => {
-      result[i] = [party, resultMap.get(party)];
+    resultMap.forEach((procentage, party) => {
+      result[i] = [party, procentage];
       i += 1;
     });
     this.setState({
