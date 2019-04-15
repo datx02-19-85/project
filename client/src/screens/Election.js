@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactLoading from 'react-loading';
 import EthCrypto from 'eth-crypto';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Button from '../components/Button';
 
 export default class Election extends React.Component {
@@ -8,7 +9,6 @@ export default class Election extends React.Component {
     super(props);
     this.state = {
       isRunning: false,
-      ownerKey: '',
       privateKey: ''
     };
   }
@@ -19,33 +19,32 @@ export default class Election extends React.Component {
       privateKey
     });
     const {
-      props: {
-        drizzle: {
-          contracts: { Voting }
-        }
+      drizzle: {
+        contracts: { Voting }
       },
-      state: { ownerKey }
-    } = this;
+      drizzleState: { accounts }
+    } = this.props;
     try {
       await Voting.methods
         .startElection(publicKey, 0, 500)
-        .send({ from: ownerKey, gas: 2000000 });
+        .send({ from: accounts[0], gas: 2000000 });
     } catch (error) {
       console.log("Couldn't start the election? -> ", error);
     }
   };
 
   stop = async () => {
-    const { ownerKey, privateKey } = this.state;
+    const { privateKey } = this.state;
     const {
       drizzle: {
         contracts: { Voting }
-      }
+      },
+      drizzleState: { accounts }
     } = this.props;
     try {
       await Voting.methods
         .stopElection(privateKey)
-        .send({ from: ownerKey, gas: 200000 });
+        .send({ from: accounts[0], gas: 200000 });
     } catch (error) {
       console.log("Couldn't stop the election? -> ", error);
     }
@@ -69,7 +68,7 @@ export default class Election extends React.Component {
   handleKey = event => {
     const result = event.target.value;
     this.setState({
-      ownerKey: result
+      privateKey: result
     });
   };
 
@@ -99,12 +98,25 @@ export default class Election extends React.Component {
               width="100%"
               height="100%"
             />
-            <Button
-              name="Stop election!"
-              color="danger"
-              onClick={stop}
-              disabled={state.ownerKey === ''}
-            />
+            <div>
+              <Button
+                name="Stop election!"
+                color="danger"
+                onClick={stop}
+                disabled={state.privateKey === ''}
+              />
+              {state.privateKey !== '' ? (
+                <CopyToClipboard text={state.privateKey}>
+                  <Button name="Copy private key!" color="warning" />
+                </CopyToClipboard>
+              ) : (
+                <input
+                  placeholder="Enter private key, for inconveniance"
+                  type="text"
+                  onChange={handleKey}
+                />
+              )}
+            </div>
           </div>
         ) : (
           <div
@@ -115,19 +127,9 @@ export default class Election extends React.Component {
             }}
           >
             <h1>No election is running</h1>
-            <Button
-              name="Start election!"
-              color="warning"
-              onClick={start}
-              disabled={state.ownerKey === ''}
-            />
+            <Button name="Start election!" color="warning" onClick={start} />
           </div>
         )}
-        <input
-          placeholder="Enter owner key, for inconveniance"
-          type="text"
-          onChange={handleKey}
-        />
       </div>
     );
   }
