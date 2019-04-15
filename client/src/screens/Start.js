@@ -2,14 +2,40 @@ import React from 'react';
 import { Chart } from 'react-google-charts';
 import ReactLoading from 'react-loading';
 import calculateResult from '../utils/CalculateResult';
+import Button from '../components/Button';
 
 class Start extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null
+      data: null,
+      hash: null,
+      vote: null
     };
   }
+
+  findVote = async () => {
+    const {
+      state,
+      props: { drizzle }
+    } = this;
+    let vote = await drizzle.contracts.Voting.methods.votes(state.hash).call();
+    if (vote.on === '') {
+      vote = 'nothing';
+    } else {
+      vote = vote.on;
+    }
+    this.setState({
+      vote
+    });
+  };
+
+  handleHash = event => {
+    const hash = event.target.value;
+    this.setState({
+      hash
+    });
+  };
 
   transformResult = async () => {
     const {
@@ -42,7 +68,7 @@ class Start extends React.Component {
   };
 
   render() {
-    const { state, transformResult } = this;
+    const { state, transformResult, handleHash, findVote } = this;
 
     transformResult();
 
@@ -56,30 +82,53 @@ class Start extends React.Component {
         }}
       >
         {state.data !== null ? (
-          <Chart
-            width="80%"
-            chartType="Bar"
-            loader={
-              <div
-                className="d-flex flex-column"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center'
-                }}
-              >
-                <h2>Loading Chart...</h2>
-                <ReactLoading type="cylon" color="black" />
-              </div>
-            }
-            data={state.data}
-            options={{
-              chart: {
-                title: 'Election',
-                subtitle: 'Parties and procentage'
-              }
+          <div
+            className="d-flex flex-column"
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
             }}
-            rootProps={{ 'data-testid': '2' }}
-          />
+          >
+            <Chart
+              chartType="Bar"
+              loader={
+                <div
+                  className="d-flex flex-column"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  <h2>Loading Chart...</h2>
+                  <ReactLoading type="cylon" color="black" />
+                </div>
+              }
+              data={state.data}
+              options={{
+                chart: {
+                  title: 'Election',
+                  subtitle: 'Parties and procentage'
+                }
+              }}
+              rootProps={{ 'data-testid': '2' }}
+            />
+            <h2>Confirm your vote:</h2>
+            <div>
+              <input
+                placeholder="Enter your voting hash:"
+                type="text"
+                onChange={handleHash}
+              />
+              <Button name="Confirm" onClick={findVote} />
+            </div>
+            {state.vote !== null ? (
+              <div>
+                <span>You voted for: </span>
+                <span style={{ fontWeight: 'bold' }}>{state.vote}</span>
+              </div>
+            ) : null}
+          </div>
         ) : (
           <h1>No election result to display</h1>
         )}

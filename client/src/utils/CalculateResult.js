@@ -10,19 +10,23 @@ export default async function calculateResult(drizzle) {
   console.log('Key is: ', privateKey);
 
   const result = votes.map(function(vote) {
-    console.log('Private key in map is: ', privateKey);
-    console.log('Vote in map is: ', vote);
+    if (vote !== '') {
+      console.log('Private key in map is: ', privateKey);
+      console.log('Vote in map is: ', vote);
+      // return decryptVote(privateKey, vote);
+    }
     return vote;
-    // return decryptVote(privateKey, vote);
   });
 
   for (let i = 0; i < total; i += 1) {
     const vote = result[i];
-    let amount = 1;
-    if (amountMap.has(vote)) {
-      amount = amountMap.get(vote) + 1;
+    if (vote !== '') {
+      let amount = 1;
+      if (amountMap.has(vote)) {
+        amount = amountMap.get(vote) + 1;
+      }
+      amountMap.set(vote, amount);
     }
-    amountMap.set(vote, amount);
   }
 
   amountMap.forEach((amount, party) => {

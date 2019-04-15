@@ -11,7 +11,7 @@ contract Voting {
     bool public electionIsRunning;
     uint public maxNumberOfVoters;
 
-    mapping(string => Vote) private votes;
+    mapping(string => Vote) public votes;
     string[] public voters;
 
     struct Vote {
