@@ -3,6 +3,7 @@ import { Chart } from 'react-google-charts';
 import ReactLoading from 'react-loading';
 import calculateResult from '../utils/CalculateResult';
 import Button from '../components/Button';
+import decryptVote from '../utils/DecryptVote';
 
 class Start extends React.Component {
   constructor(props) {
@@ -23,7 +24,10 @@ class Start extends React.Component {
     if (vote.on === '') {
       vote = 'nothing';
     } else {
-      vote = vote.on;
+      const privateKey = await drizzle.contracts.Voting.methods
+        .privateKey()
+        .call();
+      vote = await decryptVote(privateKey, vote.on);
     }
     this.setState({
       vote

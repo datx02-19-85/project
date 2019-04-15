@@ -60,7 +60,7 @@ contract Voting {
     )
     public onlyOwner notRunning
     {
-        //clearElection();
+        clearElection();
         maxNumberOfVoters = nVoters;
         publicKey = key;
         endingTime = 0;

@@ -29,7 +29,7 @@ export default class Election extends React.Component {
     try {
       await Voting.methods
         .startElection(publicKey, 0, 500)
-        .send({ from: ownerKey, gas: 200000 });
+        .send({ from: ownerKey, gas: 2000000 });
     } catch (error) {
       console.log("Couldn't start the election? -> ", error);
     }
