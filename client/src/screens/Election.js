@@ -30,7 +30,6 @@ export default class Election extends React.Component {
       await Voting.methods
         .startElection(publicKey, 0, 500)
         .send({ from: ownerKey, gas: 200000 });
-      console.log('Did start the election');
     } catch (error) {
       console.log("Couldn't start the election? -> ", error);
     }
@@ -47,7 +46,6 @@ export default class Election extends React.Component {
       await Voting.methods
         .stopElection(privateKey)
         .send({ from: ownerKey, gas: 200000 });
-      console.log('Did stop the election');
     } catch (error) {
       console.log("Couldn't stop the election? -> ", error);
     }
@@ -62,7 +60,6 @@ export default class Election extends React.Component {
     } = this.props;
     const isActuallyRunning = await Voting.methods.electionIsRunning().call();
     if (isActuallyRunning !== isRunning) {
-      console.log('Election is running: ', isActuallyRunning);
       this.setState({
         isRunning: isActuallyRunning
       });

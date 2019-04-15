@@ -3,7 +3,7 @@ import { Button } from 'reactstrap';
 import Form from 'react-bootstrap/Form';
 // import EthCrypto from 'eth-crypto';
 import getParties from '../utils/PartyCollector';
-import encryptVote from '../utils/EncryptVote';
+// import encryptVote from '../utils/EncryptVote';
 import '../Verifierstyle.css';
 import '../animate.css';
 

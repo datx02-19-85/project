@@ -1,4 +1,4 @@
-import decryptVote from './DecryptVote';
+// import decryptVote from './DecryptVote';
 import getVotes from './VoteCollector';
 
 export default async function calculateResult(drizzle) {

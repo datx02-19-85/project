@@ -8,9 +8,9 @@ class RenderID extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      i: 'nothing',
-      copy: true,
-      copied: false,
+      hash: 'nothing',
+      disableCopy: true,
+      hasCopied: false,
       canGenerate: true,
       electioNr: 0
     };
@@ -23,7 +23,6 @@ class RenderID extends Component {
       }
     } = this.props;
     const n = await Voting.methods.getNumberOfVoters().call();
-    console.log('Voters thus far: ', n);
     return n;
   };
 
@@ -34,14 +33,15 @@ class RenderID extends Component {
     const hash = Hash(seed);
     this.addVoter(hash);
     this.setState({
-      i: hash,
-      copy: false
+      hash,
+      disableCopy: false,
+      hasCopied: false
     });
   };
 
   onCopy = () => {
     this.setState({
-      copied: true
+      hasCopied: true
     });
   };
 
@@ -54,7 +54,6 @@ class RenderID extends Component {
   };
 
   addVoter = async hash => {
-    console.log('New hash is:', hash);
     const {
       drizzle: {
         contracts: { Voting }
@@ -79,7 +78,7 @@ class RenderID extends Component {
       >
         <h1>Generate Voting ID</h1>
         <div>
-          <FlipFlap id={state.i} />
+          <FlipFlap id={state.hash} />
         </div>
         <div>
           <Button
@@ -88,8 +87,12 @@ class RenderID extends Component {
             disabled={state.canGenerate}
             onClick={genHash}
           />
-          <CopyToClipboard onCopy={onCopy} text={state.i}>
-            <Button name="Copy Hash" color="warning" disabled={state.copy} />
+          <CopyToClipboard onCopy={onCopy} text={state.hash}>
+            <Button
+              name="Copy Hash"
+              color="warning"
+              disabled={state.disableCopy}
+            />
           </CopyToClipboard>
         </div>
         <div>
@@ -100,7 +103,9 @@ class RenderID extends Component {
           />
         </div>
         <div>
-          {state.copied ? <span style={{ color: 'red' }}>Copied</span> : null}
+          {state.hasCopied ? (
+            <span style={{ color: 'red' }}>Copied</span>
+          ) : null}
         </div>
       </div>
     );
