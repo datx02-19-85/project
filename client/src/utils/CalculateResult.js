@@ -3,25 +3,24 @@ import getVotes from './VoteCollector';
 
 export default async function calculateResult(drizzle) {
   const votes = await getVotes(drizzle);
-  const amountMap = new Map();
   const total = votes.length;
 
+  if (total === 0) {
+    return null;
+  }
+
+  const amountMap = new Map();
+
   const privateKey = await drizzle.contracts.Voting.methods.privateKey().call();
-  console.log('Key is: ', privateKey);
 
   const promises = votes.map(function(vote) {
     if (vote !== '') {
-      console.log('Private key in map is: ', privateKey);
-      console.log('Vote in map is: ', vote);
       const decrypted = decryptVote(privateKey, vote);
-      console.log(decrypted);
       return decrypted;
     }
     return vote;
   });
   const result = await Promise.all(promises);
-
-  console.log('Result: ', result);
 
   let actualVotes = 0;
   for (let i = 0; i < total; i += 1) {

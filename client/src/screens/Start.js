@@ -4,6 +4,7 @@ import ReactLoading from 'react-loading';
 import calculateResult from '../utils/CalculateResult';
 import Button from '../components/Button';
 import decryptVote from '../utils/DecryptVote';
+import isElectionRunning from '../utils/IsElectionRunning';
 
 class Start extends React.Component {
   constructor(props) {
@@ -46,13 +47,11 @@ class Start extends React.Component {
       state,
       props: { drizzle }
     } = this;
-    const isRunning = await drizzle.contracts.Voting.methods
-      .electionIsRunning()
-      .call();
+    const isRunning = await isElectionRunning(drizzle);
     let result = null;
     if (!isRunning && state.data === null) {
       const resultMap = await calculateResult(drizzle);
-      if (resultMap.size > 0) {
+      if (resultMap === null || resultMap.size > 0) {
         result = [['Party', 'Procentage']];
         let i = 1;
         resultMap.forEach((procentage, party) => {

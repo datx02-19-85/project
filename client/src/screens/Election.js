@@ -3,20 +3,23 @@ import ReactLoading from 'react-loading';
 import EthCrypto from 'eth-crypto';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Button from '../components/Button';
+import isElectionRunning from '../utils/IsElectionRunning';
 
 export default class Election extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isRunning: false,
-      privateKey: ''
+      privateKey: '',
+      privateKeyisCorrect: false
     };
   }
 
   start = async () => {
     const { publicKey, privateKey } = EthCrypto.createIdentity();
     this.setState({
-      privateKey
+      privateKey,
+      privateKeyisCorrect: true
     });
     const {
       drizzle: {
@@ -28,47 +31,68 @@ export default class Election extends React.Component {
       await Voting.methods
         .startElection(publicKey, 0, 500)
         .send({ from: accounts[0], gas: 2000000 });
+      this.setState({
+        isRunning: true
+      });
     } catch (error) {
       console.log("Couldn't start the election? -> ", error);
     }
   };
 
   stop = async () => {
-    const { privateKey } = this.state;
     const {
-      drizzle: {
-        contracts: { Voting }
-      },
-      drizzleState: { accounts }
-    } = this.props;
+      state: { privateKey, privateKeyisCorrect },
+      props: {
+        drizzle: {
+          contracts: { Voting }
+        },
+        drizzleState: { accounts }
+      }
+    } = this;
+    if (!privateKeyisCorrect) {
+      const r = window.confirm(
+        `Your entered private key is not correct, stop election anyway?`
+      );
+      if (!r) {
+        return;
+      }
+    }
     try {
       await Voting.methods
         .stopElection(privateKey)
         .send({ from: accounts[0], gas: 200000 });
+      this.setState({
+        isRunning: false
+      });
     } catch (error) {
       console.log("Couldn't stop the election? -> ", error);
     }
   };
 
   checkIfRunning = async () => {
-    const { isRunning } = this.state;
-    const {
-      drizzle: {
-        contracts: { Voting }
-      }
-    } = this.props;
-    const isActuallyRunning = await Voting.methods.electionIsRunning().call();
-    if (isActuallyRunning !== isRunning) {
-      this.setState({
-        isRunning: isActuallyRunning
-      });
-    }
+    const { drizzle } = this.props;
+    this.setState({
+      isRunning: await isElectionRunning(drizzle)
+    });
   };
 
-  handleKey = event => {
+  handleKey = async event => {
+    const { drizzle } = this.props;
     const result = event.target.value;
+    let recoveredPublic;
+    try {
+      recoveredPublic = await EthCrypto.publicKeyByPrivateKey(result);
+    } catch (error) {
+      // console.log("Entered wrong private key -> ", error);
+      return;
+    }
+    const actualPublic = await drizzle.contracts.Voting.methods
+      .publicKey()
+      .call();
+    const privateKeyisCorrect = recoveredPublic === actualPublic;
     this.setState({
-      privateKey: result
+      privateKey: privateKeyisCorrect ? result : '',
+      privateKeyisCorrect
     });
   };
 
@@ -99,13 +123,8 @@ export default class Election extends React.Component {
               height="100%"
             />
             <div>
-              <Button
-                name="Stop election!"
-                color="danger"
-                onClick={stop}
-                disabled={state.privateKey === ''}
-              />
-              {state.privateKey !== '' ? (
+              <Button name="Stop election!" color="danger" onClick={stop} />
+              {state.privateKeyisCorrect ? (
                 <CopyToClipboard text={state.privateKey}>
                   <Button name="Copy private key!" color="warning" />
                 </CopyToClipboard>
