@@ -4,6 +4,7 @@ import EthCrypto from 'eth-crypto';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Button from '../components/Button';
 import isElectionRunning from '../utils/IsElectionRunning';
+import checkCryptoKeyPair from '../utils/CheckCryptoKeyPair';
 
 export default class Election extends React.Component {
   constructor(props) {
@@ -79,17 +80,8 @@ export default class Election extends React.Component {
   handleKey = async event => {
     const { drizzle } = this.props;
     const result = event.target.value;
-    let recoveredPublic;
-    try {
-      recoveredPublic = await EthCrypto.publicKeyByPrivateKey(result);
-    } catch (error) {
-      // console.log("Entered wrong private key -> ", error);
-      return;
-    }
-    const actualPublic = await drizzle.contracts.Voting.methods
-      .publicKey()
-      .call();
-    const privateKeyisCorrect = recoveredPublic === actualPublic;
+    const publicKey = drizzle.contracts.Voting.methods.publicKey().call();
+    const privateKeyisCorrect = await checkCryptoKeyPair(publicKey, result);
     this.setState({
       privateKey: privateKeyisCorrect ? result : '',
       privateKeyisCorrect

@@ -1,5 +1,6 @@
 import decryptVote from './DecryptVote';
 import getVotes from './VoteCollector';
+import checkCryptoKeyPair from './CheckCryptoKeyPair';
 
 export default async function calculateResult(drizzle) {
   const votes = await getVotes(drizzle);
@@ -12,6 +13,12 @@ export default async function calculateResult(drizzle) {
   const amountMap = new Map();
 
   const privateKey = await drizzle.contracts.Voting.methods.privateKey().call();
+  const publicKey = await drizzle.contracts.Voting.methods.publicKey().call();
+  const isKeyPairCorrect = await checkCryptoKeyPair(publicKey, privateKey);
+
+  if (!isKeyPairCorrect) {
+    return null;
+  }
 
   const promises = votes.map(function(vote) {
     if (vote !== '') {
