@@ -82,7 +82,6 @@ export default class Election extends React.Component {
     const result = event.target.value;
     const publicKey = await drizzle.contracts.Voting.methods.publicKey().call();
     const privateKeyisCorrect = await checkCryptoKeyPair(publicKey, result);
-    console.log('Private key is correct: ', privateKeyisCorrect);
     this.setState({
       privateKey: privateKeyisCorrect ? result : '',
       privateKeyisCorrect
