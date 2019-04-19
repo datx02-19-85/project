@@ -80,8 +80,9 @@ export default class Election extends React.Component {
   handleKey = async event => {
     const { drizzle } = this.props;
     const result = event.target.value;
-    const publicKey = drizzle.contracts.Voting.methods.publicKey().call();
+    const publicKey = await drizzle.contracts.Voting.methods.publicKey().call();
     const privateKeyisCorrect = await checkCryptoKeyPair(publicKey, result);
+    console.log('Private key is correct: ', privateKeyisCorrect);
     this.setState({
       privateKey: privateKeyisCorrect ? result : '',
       privateKeyisCorrect
@@ -122,7 +123,7 @@ export default class Election extends React.Component {
                 </CopyToClipboard>
               ) : (
                 <input
-                  placeholder="Enter private key, for inconveniance"
+                  placeholder="Enter private key"
                   type="text"
                   onChange={handleKey}
                 />
