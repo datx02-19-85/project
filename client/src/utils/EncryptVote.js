@@ -4,7 +4,7 @@ import EthCrypto from 'eth-crypto';
  * @param Contract public-key, selected party
  * @return String
  */
-async function encryptVote(publicKey, party) {
+export async function encryptVote(publicKey, party) {
   const encryptedObject = await EthCrypto.encryptWithPublicKey(
     publicKey,
     JSON.stringify(party)
@@ -19,4 +19,6 @@ async function encryptVote(publicKey, party) {
   return string;
 }
 
-export default encryptVote;
+export function genPubKey() {
+  return EthCrypto.createIdentity().publicKey;
+}

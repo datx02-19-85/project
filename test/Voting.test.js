@@ -1,4 +1,6 @@
 require("truffle-test-utils").init();
+const generateHash = require("../client/src/utils/HashGenerator");
+const { genPubKey, encryptVote } = require("../client/src/utils/EncryptVote");
 
 const Voting = artifacts.require("Voting");
 const MAX_DEPLOYED_BYTECODE_SIZE = 24576;
@@ -9,14 +11,14 @@ contract("Voting", accounts => {
   const account = accounts[1];
 
   before(async () => {
-    // instance = await Voting.deployed();
-    // await instance.startElection("public key", 1500, 50);
+    instance = await Voting.deployed();
+    await instance.startElection("public key", 0, 500);
   });
 
   beforeEach(async () => {
-    instance = await Voting.deployed();
-    await instance.stopElection("some eky");
-    await instance.startElection("public key", 0, 30);
+    // instance = await Voting.deployed();
+    // await instance.stopElection("some eky");
+    // await instance.startElection("public key", 0, 30);
   });
 
   it("Should add voter", async () => {
@@ -105,26 +107,84 @@ contract("Voting", accounts => {
   });
 
   /**
-   * This test is not used correctly if this comment is present.
-   * endingTime variable in contract is not used.
+   * Used to collect gas prices
    */
-  it("Should get time left of voting", async () => {
-    const timeLeft = await instance.getTimeLeft();
-    console.log("Time left is: ", timeLeft);
+  it("Should send different sized strings", async () => {
+    const iterations = 250;
 
-    assert(timeLeft, "Time left should not be undefined");
+    // let voter = "";
+    let vote = "";
+
+    console.log("STARTING COLLECTION TEST");
+
+    for (let i = 0; i < iterations; i += 1) {
+      // if (i < 100) {
+      //   voter += "0";
+      // }
+      // if (i < 10) {
+      //   voter += "0";
+      // }
+      // voter += i.toString();
+      const voter = await generateHash(2, i);
+
+      vote += "a";
+
+      await instance.addVoter(voter, { from: owner });
+
+      console.log("Sending Vote Number: ", i);
+      await instance.vote(voter, vote);
+      console.log("Vote " + i + " is complete");
+      // voter = "";
+    }
+
+    assert(true);
   });
 
   /**
-   * See comment for test above
+   * Used to see if gas price changes over number of transactions
    */
-  it("Should get 0 because time passed voting time", async () => {
-    const response = await instance.getTimeLeft();
-    // Im not sure why we get an object as result.
-    // I guess its something about using js testing.
-    const timeLeft = response.words[0];
-    console.log("timeleft is ", timeLeft);
+  it("Should send same sized string multiple times", async () => {
+    const iterations = 1;
+    let voter = "";
+    const vote = "aaaaa";
+    console.log("STARTING SENDING TEST");
 
-    assert(timeLeft > 0, "timeLeft should be more then 0");
+    for (let i = 0; i < iterations; i += 1) {
+      if (i < 100) {
+        voter += "0";
+      }
+      if (i < 10) {
+        voter += "0";
+      }
+      voter += i.toString();
+      await instance.addVoter(voter, { from: owner });
+
+      console.log("Sending Vote Number: ", i);
+      await instance.vote(voter, vote);
+      console.log("Vote " + i + " is complete");
+      voter = "";
+    }
+  });
+
+  /**
+   * Used to send "real" votes multiple times
+   */
+  it("Should send multiple correct votes", async () => {
+    const iteration = 1;
+    console.log("STARTING CORRECT VOTE TESTING");
+    const party = "Kalleanka Partiet";
+    const vote = await encryptVote(genPubKey(), party);
+    console.log("Vote is: ", vote);
+
+    for (let i = 1; i <= iteration; i += 1) {
+      const voter = await generateHash(2, i);
+      await instance.addVoter(voter, { from: owner });
+      console.log("Sending Vote Number: ", i);
+      await instance.vote(voter, vote);
+      console.log("Vote " + i + " is complete");
+    }
+
+    console.log("COMPLETE");
+    assert(true);
   });
 });

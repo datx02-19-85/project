@@ -1,6 +1,6 @@
 import assert from 'assert';
 import EthCrypto from 'eth-crypto';
-import encryptVote from '../utils/EncryptVote';
+import { encryptVote } from '../utils/EncryptVote';
 import decryptVote from '../utils/DecryptVote';
 
 let publicKey;

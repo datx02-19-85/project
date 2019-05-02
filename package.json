@@ -6,16 +6,10 @@
     "npm": "6.5.x"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-eslint": "^10.0.1",
+    "babel-preset-env": "^1.7.0",
     "concurrently": "^4.1.0",
-    "eth-gas-reporter": "^0.1.12",
-    "ethlint": "^1.2.3",
-    "ganache-cli": "^6.4.1",
-    "husky": "^1.3.1",
-    "lint-staged": "^8.1.5",
-    "npm-run-all": "^4.1.5",
-    "truffle": "^5.0.7",
-    "truffle-test-utils": "^0.1.0",
     "eslint": "^5.15.3",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^4.1.0",
@@ -23,8 +17,16 @@
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
+    "eth-gas-reporter": "^0.1.12",
+    "ethlint": "^1.2.3",
+    "ganache-cli": "^6.4.1",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.5",
+    "npm-run-all": "^4.1.5",
     "prettier": "^1.16.4",
-    "pretty-quick": "^1.10.0"
+    "pretty-quick": "^1.10.0",
+    "truffle": "^5.0.7",
+    "truffle-test-utils": "^0.1.0"
   },
   "scripts": {
     "ganache": "ganache-cli --port 7545 --networkId $npm_package_config_ganache_networkId --allowUnlimitedContractSize --gasLimit $npm_package_config_ganache_gasLimit --gasPrice $npm_package_config_ganache_gasPrice --mnemonic \"$MNEMONIC\"",
@@ -56,5 +58,6 @@
       "eslint client/src --fix",
       "git add"
     ]
-  }
+  },
+  "dependencies": {}
 }

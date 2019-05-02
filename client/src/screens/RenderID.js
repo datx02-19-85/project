@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Hash from 'object-hash';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import FlipFlap from '../components/FlipFlap';
 import Button from '../components/Button';
+import generateHash from '../utils/HashGenerator';
 
 class RenderID extends Component {
   constructor(props) {
@@ -29,8 +29,7 @@ class RenderID extends Component {
   genHash = async () => {
     const { electioNr } = this.state;
     const nVoters = await this.getNVoters();
-    const seed = { nr: electioNr, prime1: 5381, nVoters, prime2: 2 };
-    const hash = Hash(seed);
+    const hash = await generateHash(electioNr, nVoters);
     this.addVoter(hash);
     this.setState({
       hash,
