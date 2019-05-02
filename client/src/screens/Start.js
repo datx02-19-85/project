@@ -51,7 +51,7 @@ class Start extends React.Component {
     let result = null;
     if (!isRunning && state.data === null) {
       const resultMap = await calculateResult(drizzle);
-      if (resultMap != null && resultMap.size > 0) {
+      if (resultMap !== null && resultMap.size > 0) {
         result = [['Party', 'Procentage']];
         let i = 1;
         resultMap.forEach((procentage, party) => {
