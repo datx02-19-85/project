@@ -23,12 +23,12 @@ jobs:
           name: contract test
           command: |
             npm install
+            npm --prefix client/ install
             npm run lint:sol
             npm run test
 
       - run:
           name: react test
           command: |
-            npm --prefix client/ install
             npm run lint:react
             npm run test:react
