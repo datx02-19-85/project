@@ -1,6 +1,6 @@
 require("truffle-test-utils").init();
-const generateHash = require("../client/src/utils/HashGenerator");
-const { genPubKey, encryptVote } = require("../client/src/utils/EncryptVote");
+import generateHash from "../client/src/utils/HashGenerator";
+import { genPubKey, encryptVote } from "../client/src/utils/EncryptVote";
 
 const Voting = artifacts.require("Voting");
 const MAX_DEPLOYED_BYTECODE_SIZE = 24576;
@@ -110,7 +110,7 @@ contract("Voting", accounts => {
    * Used to collect gas prices
    */
   it("Should send different sized strings", async () => {
-    const iterations = 250;
+    const iterations = 1;
 
     // let voter = "";
     let vote = "";

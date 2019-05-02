@@ -31,6 +31,9 @@ var gasLimit = process.env.npm_package_config_ganache_gasLimit;
 
 const path = require("path");
 
+require("babel-register");
+require("babel-polyfill");
+
 module.exports = {
   /**
    * Changing build directory to putting contracts inside the react-app
