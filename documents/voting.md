@@ -1,6 +1,6 @@
 # Voting
 
-This is a implementation of a Voting smart-contracts that makes it possibel to start and stop an election. Its only when the election is stopped its possible to get the result.
+This is a implementation of a Voting smart-contracts that makes it possibel to start and stop an election. Its only when the election is stopped its easy to collect the votes.
 
 ## What is it doing
 
@@ -19,12 +19,12 @@ To be able to see how people voted you have to stop the election and then collec
 
 - isAbleToVote(string votingId)
   - This function is taking the voting id and returns if it is able to vote.
-- startElection(string publicKey, int upTime, int maxNumberOfVoters)
+- startElection(string publicKey, int maxNumberOfVoters)
   - Starts an election if its possible. If an election is already started this function will give you error. Starting a new one will clear all the data from last election.
 - stopElection(string privateKey)
   - Stop an election. This function can be used even if an election is not running.
 - vote(string voterId, string vote)
-  - This takes a voterId and checks if its eligible to vote. Of not will throw error else saving the vote.
+  - This takes a voterId and checks if its eligible to vote. If not will throw error else saving the vote.
 - addVoter(string voterId)
   - This makes an voterId eligible to vote.
 - getNumberOfVoters()

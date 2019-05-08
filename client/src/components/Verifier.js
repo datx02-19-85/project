@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'reactstrap';
 import Form from 'react-bootstrap/Form';
 import getParties from '../utils/PartyCollector';
-import { encryptVote } from '../utils/EncryptVote';
+import encryptVote from '../utils/EncryptVote';
 import '../Verifierstyle.css';
 import '../animate.css';
 
@@ -10,7 +10,7 @@ class Verifier extends React.Component {
   constructor() {
     super();
     this.state = {
-      count: null,
+      voterID: null,
       parties: null,
       candidate: null,
       voteConfirm: null,
@@ -49,10 +49,8 @@ class Verifier extends React.Component {
 
   getTxStatus = () => {
     // get the transaction states from the drizzle state
-
     const { drizzle: props } = this.props;
     const stateUpdate = props.store.getState();
-    // const stateUpdate = this.props.drizzle.store.getState();
     const { voteConfirm } = this.state;
 
     if (voteConfirm == null) return null;
@@ -67,71 +65,53 @@ class Verifier extends React.Component {
       stateUpdate.transactions[txHash].status}`;
   };
 
-  handleSend = (count, encryptedVote) => {
+  handleSend = (voterID, encryptedVote) => {
     const { drizzle, drizzleState } = this.props;
     const contract = drizzle.contracts.Voting;
 
-    const voteConfirm = contract.methods.vote.cacheSend(count, encryptedVote, {
-      from: drizzleState.accounts[0],
-      gas: 250000
-    });
+    const voteConfirm = contract.methods.vote.cacheSend(
+      voterID,
+      encryptedVote,
+      {
+        from: drizzleState.accounts[0],
+        gas: 250000
+      }
+    );
 
     this.setState({ voteConfirm });
   };
 
   async handleVote() {
     const { drizzle } = this.props;
-    const { count } = this.state;
+    const { voterID } = this.state;
     const { candidate } = this.state;
     const publicKey = await drizzle.contracts.Voting.methods.publicKey().call();
     const encryptedVote = await encryptVote(publicKey, candidate);
     const r = window.confirm(`You are now voting for ${candidate}`);
     if (r === true) {
-      this.handleSend(count, encryptedVote);
+      this.handleSend(voterID, encryptedVote);
     }
   }
 
   handleSubmit(event) {
     this.setState({
-      count: event.target.value
+      voterID: event.target.value
     });
   }
 
   async handleVerify() {
-    const { count } = this.state;
-    await this.setValue(count);
-    // this.handleTrue();
-    // window.alert('You are now verified. Please cast your vote.'));
+    const { voterID } = this.state;
+    await this.setValue(voterID);
   }
 
   handleForm(event) {
-    // this.setState({
-    //  candidate:event.target.key
-    // })
     this.setState({ candidate: event.target.value });
-    // console.log(this.state.candidate);
   }
-
-  /* handleTrue() {
-    const { drizzleState } = this.props;
-    const contract = drizzleState.contracts.Voting;
-    const { stackId } = this.state;
-    const able = contract.isAbleToVote[stackId];
-
-    this.setState({ able });
-    console.log(`test show ${  this.state.show}`);
-    console.log(`here is able shit ${  able}`);
-
-    if (this.state.able) this.setState({ show: true });
-  } */
 
   render() {
     const { parties } = this.state;
     const { able } = this.state;
 
-    // for (let i=0; i < 3; i += 1){
-    //   options.push(<option> {parties[0] } </option>)
-    // }
     if (!parties) return '';
     const size = parties.length; // antalet kandidater
     const options = []; // array med kandidater (i formatet <option> PARTI </option>)
@@ -139,8 +119,6 @@ class Verifier extends React.Component {
       //
       options.push(<option key={i}> {parties[i]} </option>); //
     }
-
-    // if (value) console.log('value is ', value.value);
 
     return (
       <div>
@@ -166,7 +144,6 @@ class Verifier extends React.Component {
               </Button>
             </div>
           </div>
-          {/* <div className ="animated fadeInLeft ">Key status: {value != null ? value.value.toString() : ''}</div> */}
           {able ? (
             <div className="boxx">
               <div className=" animated fadeInDown  ">

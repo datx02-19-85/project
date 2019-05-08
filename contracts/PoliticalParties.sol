@@ -5,11 +5,9 @@ contract PoliticalParties {
     string[] public parties;
 
     constructor () public {
-        
         parties.push("Moderaterna");
         parties.push("Socialdemokraterna");
         parties.push("Kalleanka partiet");
-
     }
 
     // constructor(bytes32[] memory parties) public {
@@ -42,8 +40,8 @@ contract PoliticalParties {
     (
         string memory s1,
         string memory s2
-    ) 
-    private pure 
+    )
+    private pure
     returns(bool)
     {
         return keccak256(abi.encodePacked(s1)) == keccak256(abi.encodePacked(s2));

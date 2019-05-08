@@ -68,7 +68,7 @@ This should work for all types of truffle commands you want, eg migrate, test et
 
 ## How to run frontend
 
-See [README](/client/README.md)
+See [client/README](/client/README.md)
 
 ---
 
@@ -86,20 +86,3 @@ See [README](/client/README.md)
 
 Our boilerplate code is from this [repo](https://github.com/tylerjohnhaden/__truffle-boilerplate)
 following this [guide](https://blog.ippon.tech/creating-your-first-truffle-project-part-2-of-2/) to understand the code.
-
----
-
-## TODO:
-
-- [ ] Set correct license for project
-- [ ] A small voting prototype
-  - [ ] Iteration 1: Be able to vote
-    - [ ] GUI for generating random hash ID for voters
-      - [ ] Add hash to contract to allow voter to vote
-    - [ ] GUI to display all political parties
-    - [ ] GUI for inputting hash ID
-    - [ ] Add vote to contract (vote)
-  - [ ] Iteration 2: Show that you voted
-  - [ ] ...
-
-More TODOs will be added shortly...
