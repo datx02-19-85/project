@@ -5,9 +5,19 @@ contract PoliticalParties {
     string[] public parties;
 
     constructor () public {
-        parties.push("Moderaterna");
-        parties.push("Socialdemokraterna");
-        parties.push("Kalleanka partiet");
+        parties.push("Datateknologsektionen");
+        parties.push("Teknologsektionen Informationsteknik");
+        parties.push("Teknologsektionen Samhällsbyggnad");
+        parties.push("Elektroteknologsektionen");
+        parties.push("Arkitekturstuderandesektionen");
+        parties.push("Teknisk design");
+        parties.push("Arkitekturstuderandesektionen");
+        parties.push("Teknologsektionen Industriell Ekonomi");
+        parties.push("Fysikteknologsektionen");
+        parties.push("Ingenjörsteknologsektionen");
+        parties.push("Kemiteknologsektionen");
+        parties.push("Teknologsektionen för Automation och Mekatronik");
+        parties.push("Sjösektionen");
     }
 
     // constructor(bytes32[] memory parties) public {
