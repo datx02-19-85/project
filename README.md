@@ -85,6 +85,6 @@ See [client/README](/client/README.md)
 ## More information about the repo
 Libraries that were used:  
 https://github.com/pubkey/eth-crypto  
-https://www.npmjs.com/package/eccrypto\
+https://www.npmjs.com/package/eccrypto  
 Our boilerplate code is from this [repo](https://github.com/tylerjohnhaden/__truffle-boilerplate)
 following this [guide](https://blog.ippon.tech/creating-your-first-truffle-project-part-2-of-2/) to understand the code.
