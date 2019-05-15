@@ -47,26 +47,25 @@ class Start extends React.Component {
       state,
       props: { drizzle }
     } = this;
-    const isRunning = await isElectionRunning(drizzle);
-    let result = null;
-    if (!isRunning && state.data === null) {
-      const resultMap = await calculateResult(drizzle);
-      if (resultMap !== null && resultMap.size > 0) {
-        result = [['Party', 'Procentage']];
-        let i = 1;
-        resultMap.forEach((procentage, party) => {
-          result[i] = [party, procentage];
-          i += 1;
-        });
+    if (state.data === null) {
+      const isRunning = await isElectionRunning(drizzle);
+      if (!isRunning) {
+        let result = null;
+        const resultMap = await calculateResult(drizzle);
+        if (resultMap !== null && resultMap.size > 0) {
+          result = [['Party', 'Procentage']];
+          let i = 1;
+          resultMap.forEach((procentage, party) => {
+            result[i] = [party, procentage];
+            i += 1;
+          });
+        }
+        if (result !== null) {
+          this.setState({
+            data: result
+          });
+        }
       }
-    }
-    if (
-      (isRunning && state.data !== null) ||
-      (!isRunning && state.data === null)
-    ) {
-      this.setState({
-        data: result
-      });
     }
   };
 

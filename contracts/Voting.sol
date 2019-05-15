@@ -33,7 +33,7 @@ contract Voting {
 
     modifier notRunning {
         require(electionIsRunning == false, "Vote should not be running");
-        require(maxNumberOfVoters <= voters.length, "Max number of voters is reached");
+        require(maxNumberOfVoters >= voters.length, "Max number of voters is reached");
         _;
     }
 

@@ -29,6 +29,8 @@ export default async function calculateResult(drizzle) {
   });
   const result = await Promise.all(promises);
 
+  console.log('Decrypted results: ', result);
+
   let actualVotes = 0;
   for (let i = 0; i < total; i += 1) {
     const vote = result[i];
