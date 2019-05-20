@@ -3,16 +3,15 @@ import ReactLoading from 'react-loading';
 import EthCrypto from 'eth-crypto';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Button from '../components/Button';
-import isElectionRunning from '../utils/IsElectionRunning';
 import checkCryptoKeyPair from '../utils/CheckCryptoKeyPair';
 
 export default class Election extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isRunning: false,
       privateKey: '',
-      privateKeyisCorrect: false
+      privateKeyisCorrect: false,
+      isRunning: props.isRunning
     };
   }
 
@@ -70,13 +69,6 @@ export default class Election extends React.Component {
     }
   };
 
-  checkIfRunning = async () => {
-    const { drizzle } = this.props;
-    this.setState({
-      isRunning: await isElectionRunning(drizzle)
-    });
-  };
-
   handleKey = async event => {
     const { drizzle } = this.props;
     const result = event.target.value;
@@ -89,8 +81,7 @@ export default class Election extends React.Component {
   };
 
   render() {
-    const { checkIfRunning, state, start, stop, handleKey } = this;
-    checkIfRunning();
+    const { state, start, stop, handleKey } = this;
     return (
       <div
         className="d-flex flex-column"
