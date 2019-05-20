@@ -14,7 +14,9 @@ class Verifier extends React.Component {
       parties: null,
       candidate: null,
       voteConfirm: null,
-      able: false
+      able: false,
+      didVote: false,
+      input: ''
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleVerify = this.handleVerify.bind(this);
@@ -78,7 +80,7 @@ class Verifier extends React.Component {
       }
     );
 
-    this.setState({ voteConfirm });
+    this.setState({ voteConfirm, didVote: true });
   };
 
   async handleVote() {
@@ -95,7 +97,8 @@ class Verifier extends React.Component {
 
   handleSubmit(event) {
     this.setState({
-      voterID: event.target.value
+      voterID: event.target.value,
+      input: event.target.value
     });
   }
 
@@ -110,7 +113,20 @@ class Verifier extends React.Component {
 
   render() {
     const { parties } = this.state;
-    const { able } = this.state;
+    const { able, didVote, input } = this.state;
+
+    if (didVote) {
+      // Reset this page
+      this.setState({
+        voterID: null,
+        candidate: null,
+        voteConfirm: null,
+        able: false,
+        didVote: false,
+        input: ''
+      });
+      this.forceUpdate();
+    }
 
     if (!parties) return '';
     const size = parties.length; // antalet kandidater
@@ -130,6 +146,7 @@ class Verifier extends React.Component {
                 type="text"
                 className="voteInput"
                 onChange={this.handleSubmit}
+                value={input}
               />
             </div>
             <div className="d-flex justify-content-center">
