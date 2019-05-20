@@ -4,6 +4,7 @@ import EthCrypto from 'eth-crypto';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Button from '../components/Button';
 import checkCryptoKeyPair from '../utils/CheckCryptoKeyPair';
+import isElectionRunning from '../utils/IsElectionRunning';
 
 export default class Election extends React.Component {
   constructor(props) {
@@ -11,8 +12,13 @@ export default class Election extends React.Component {
     this.state = {
       privateKey: '',
       privateKeyisCorrect: false,
-      isRunning: props.isRunning
+      isRunning: false
     };
+    isElectionRunning(props.drizzle).then(isRunning => {
+      this.setState({
+        isRunning
+      });
+    });
   }
 
   start = async () => {

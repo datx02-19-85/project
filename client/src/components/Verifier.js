@@ -139,7 +139,7 @@ class Verifier extends React.Component {
     return (
       <div>
         <div className=" d-flex justify-content-center">
-          <div className="idBox">
+          <div>
             <div className="d-flex justify-content-center">Your key: </div>
             <div className="d-flex justify-content-center">
               <input
