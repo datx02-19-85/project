@@ -4,13 +4,13 @@ import ReactLoading from 'react-loading';
 import calculateResult from '../utils/CalculateResult';
 import Button from '../components/Button';
 import decryptVote from '../utils/DecryptVote';
-import isElectionRunning from '../utils/IsElectionRunning';
 
 class Start extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: null,
+      hasResult: false,
       hash: null,
       vote: null
     };
@@ -45,10 +45,9 @@ class Start extends React.Component {
   transformResult = async () => {
     const {
       state,
-      props: { drizzle }
+      props: { drizzle, isRunning }
     } = this;
     if (state.data === null) {
-      const isRunning = await isElectionRunning(drizzle);
       if (!isRunning) {
         let result = null;
         const resultMap = await calculateResult(drizzle);
@@ -60,11 +59,10 @@ class Start extends React.Component {
             i += 1;
           });
         }
-        if (result !== null) {
-          this.setState({
-            data: result
-          });
-        }
+        this.setState({
+          data: result,
+          hasResult: true
+        });
       }
     }
   };
@@ -72,7 +70,9 @@ class Start extends React.Component {
   render() {
     const { state, transformResult, handleHash, findVote } = this;
 
-    transformResult();
+    if (!state.hasResult) {
+      transformResult();
+    }
 
     return (
       <div

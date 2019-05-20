@@ -8,10 +8,31 @@ import RenderID from '../screens/RenderID';
 import Verifier from '../components/Verifier';
 import Election from '../screens/Election';
 
+import isElectionRunning from "./IsElectionRunning";
+
 export default class Routing extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isRunning: false
+    };
+    isElectionRunning(props.drizzle).then(isRunning => {
+      this.state = {
+        isRunning
+      };
+    });
+  }
+
   start = () => {
     const { drizzle, drizzleState } = this.props;
-    return <Start drizzle={drizzle} drizzleState={drizzleState} />;
+    const {isRunning} = this.state;
+    return (
+      <Start
+        drizzle={drizzle}
+        drizzleState={drizzleState}
+        isRunning={isRunning}
+      />
+    );
   };
 
   generate = () => {
@@ -26,7 +47,14 @@ export default class Routing extends React.Component {
 
   election = () => {
     const { drizzle, drizzleState } = this.props;
-    return <Election drizzle={drizzle} drizzleState={drizzleState} />;
+    const {isRunning} = this.state;
+    return (
+      <Election
+        drizzle={drizzle}
+        drizzleState={drizzleState}
+        isRunning={isRunning}
+      />
+    );
   };
 
   render() {
