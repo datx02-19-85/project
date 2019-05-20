@@ -76,6 +76,14 @@ module.exports = {
       host: "127.0.0.1", // Localhost (default: none)
       port: 7545, // Standard Ethereum port (default: none)
       network_id: "*"
+    },
+
+    hamachiNetwork: {
+      host: "25.18.253.203",
+      port: 7545,
+      network_id: "*",
+      gas: 6500000,
+      gasPrice: 25000000000
     }
 
     // Another network with more advanced options...
