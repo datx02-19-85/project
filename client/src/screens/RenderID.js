@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import FlipFlap from '../components/FlipFlap';
 import Button from '../components/Button';
-import generateHash from '../utils/HashGenerator';
+// import generateHash from '../utils/HashGenerator';
 
 class RenderID extends Component {
   constructor(props) {
@@ -28,10 +28,13 @@ class RenderID extends Component {
 
   genHash = async () => {
     const { electioNr } = this.state;
-    const nVoters = await this.getNVoters();
-    const hash = await generateHash(electioNr, nVoters);
+    // const nVoters = await this.getNVoters();
+    // const hash = await generateHash(electioNr, nVoters);
+    const hash = `voter${electioNr}`;
     this.addVoter(hash);
+    const newElectionNr = electioNr + 1;
     this.setState({
+      electioNr: newElectionNr,
       hash,
       disableCopy: false,
       hasCopied: false
